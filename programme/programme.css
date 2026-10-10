@@ -443,11 +443,12 @@
 
 @media (max-width: 560px) {
   .programme_move_label {
-    grid-template-columns: 28px 1fr;
+    grid-template-columns: 28px minmax(0, 1fr);
     grid-template-areas:
       "drag select"
-      "counter comment"
-      "counter remove";
+      "counter counter"
+      "comment comment"
+      ". remove";
   }
 
   .programme_drag_handle {
@@ -460,10 +461,13 @@
 
   .programme_counter {
     grid-area: counter;
+    justify-self: center;
+    width: 23rem;
   }
 
   .programme_move_comment {
     grid-area: comment;
+    min-width: 0;
   }
 
   .programme_remove_btn {

@@ -86,12 +86,12 @@ const SUCCESS_ICON = `
 
 </svg>`;
 
-const UPLOAD_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
+const UPLOAD_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
   <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
   <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
 </svg>`;
 
-const BULLSEYE_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bullseye" viewBox="0 0 16 16">
+const BULLSEYE_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-bullseye" viewBox="0 0 16 16">
   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
   <path d="M8 13A5 5 0 1 1 8 3a5 5 0 0 1 0 10m0 1A6 6 0 1 0 8 2a6 6 0 0 0 0 12"/>
   <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8"/>
@@ -129,9 +129,9 @@ const NAVBAR_CONFIG = {
 
   programme: {
     homeAction: "ImportProgrammeScreen()",
-    homeLabel: "Programme Home",
+    homeLabel: "Practice Home",
     savedAction: "SavedSessionsScreen('programme')",
-    savedLabel: "Saved Programmes",
+    savedLabel: "Saved Practices",
   },
 };
 
@@ -381,20 +381,20 @@ const PROGRAMME_SESSION_NAME_POPUP = (storageKey, action) => {
 //================================
 
 function WORKOUT_SESSION_LANDING_PAGE() {
-  return `<div id="import_screen_wrapper" class="flex-column">
-    <div class="import_screen_top flex-column">
-        <label id="workout_string_lbl" for="workout_string">WORKOUT STRING</label>
-        <textarea 
-            id="workout_string"
-            name="workout_string" 
-            rows="6" 
-            cols="50">
-        </textarea>
-        <div class="my_btn pointer" id="import_workout_btn" onClick="MovesSelectionScreen(document.getElementById('workout_string').value.trim())">${UPLOAD_ICON} IMPORT WORKOUT</div>
-    </div>
-    <div class="import_screen_bottom flex-column">
-        <div class="my_btn pointer" id="create_workout_btn" onClick="MovesSelectionScreen()"><span>${PLUS_CIRCLE_FILL}</span><span>CREATE WORKOUT</span></div>
-        <div class="my_btn pointer" id="load_workout_btn" onClick="newSessionStatePopup('load')">${BULLSEYE_ICON} LOAD WORKOUT</div>
+  return `<div id="import_screen_wrapper">
+	<div id="import_screen_panel">
+        <h1>Session</h1>
+
+        <div class="import_screen_top">
+          <label for="workout_string" id="workout_string_lbl">Import session</label>
+          <textarea id="workout_string" rows="5" placeholder="Paste your time-based session string here..."></textarea>
+          <div class="my_btn pointer" id="import_workout_btn" onclick="MovesSelectionScreen(document.getElementById('workout_string').value.trim())"><span>${UPLOAD_ICON}</span><span>Import Session</span></div>
+        </div>
+
+        <div class="import_screen_bottom">
+			    <div class="my_btn pointer" id="create_workout_btn" onclick="MovesSelectionScreen()"><span>${PLUS_CIRCLE_FILL}</span><span>Create Session</span></div>
+			    <div class="my_btn pointer" id="load_workout_btn" onclick="newSessionStatePopup('load')"><span>${BULLSEYE_ICON}</span><span>Load Session</span></div>
+        </div>
     </div>
 </div>`;
 }
@@ -590,29 +590,26 @@ function PROGRAMME_LANDING_PAGE() {
   return `
     <div class="programme_import_screen">
       <div class="programme_import_panel">
-        <h1>Programme</h1>
+        <h1>Practice</h1>
 
         <div class="programme_import_box">
-          <label for="programme_base64_input">Import programme</label>
+          <label for="programme_base64_input">Import practice</label>
           <textarea
             id="programme_base64_input"
             rows="5"
             placeholder="Paste a base64-encoded programme JSON here..."
           ></textarea>
-          <button id="programme_import_btn" class="btn btn-primary">
-            Import
+          <button id="programme_import_btn" class="my_btn">
+            <span>${UPLOAD_ICON}</span><span>Import Practice</span>
           </button>
         </div>
 
-        <div class="programme_import_box">
-          <button id="programme_new_btn" class="btn btn-success" onclick="ProgrammeSelectionScreen()">
-            Create New Programme
+        <div class="programme_import_bottom">
+          <button id="programme_new_btn" class="my_btn" onclick="ProgrammeSelectionScreen()">
+            <span>${PLUS_CIRCLE_FILL}</span><span>Create Practice</span>
           </button>
-        </div>
-
-        <div class="programme_import_box">
-          <button class="programme_load_state_btn btn btn-secondary" onclick="newProgrammeStatePopup('load')">
-            Load Saved Programme
+        <button id="programme_load_state_btn" class="programme_load_state_btn my_btn" onclick="newProgrammeStatePopup('load')">
+            <span>${BULLSEYE_ICON}</span><span>Load Practice</span>
           </button>
         </div>
       </div>
@@ -624,10 +621,10 @@ function PROGRAMME_WORKOUT_CONFIG() {
   return `
     <div id="programme_workout_settings" class="programme_settings">
       <div class="programme_title_wrapper">
-        <h2>Programme Builder</h2>
+        <h2>Practice Builder</h2>
       </div>
       <div class="programme_info">
-        <span>Build a checklist workout, drag to reorder, and save it like a normal session.</span>
+        <span>Build a practice checklist workout, drag to reorder, and save it like a normal session.</span>
       </div>
       <div class="programme_total_count_box">
         <span>Exercises:</span>
@@ -696,6 +693,7 @@ function PROGRAMME_MOVE_LABEL(dropdown, count, comment, load) {
         class="programme_move_comment"
         value="${comment || ""}"
         placeholder="Comment (optional)"
+        name="programme_move_comment"
       />
       <button class="programme_remove_btn" type="button">🗑</button>
     </div>

@@ -275,10 +275,66 @@ const EXERCISES = [
   },
   {
     id: "g74b1a9d",
-    name: "Babyfreeze to Handstand",
+    name: "Turtle Freeze to Handstand",
     category: "Conditioning",
     description:
       "A dynamic pathway from a baby freeze into a handstand transition, training balance, shoulder stability, and body control.",
+  },
+  {
+    id: "0d7a4c91",
+    name: "Handstand Push-ups",
+    category: "Conditioning",
+    description:
+      "A strength exercise performed upside down, lowering the head toward the floor and pressing back to a handstand using the shoulders and arms.",
+  },
+  {
+    id: "f0d3a8b1",
+    name: "Turtle Freeze to Shoulder Freeze",
+    category: "Conditioning",
+    description:
+      "A controlled transition from a turtle freeze into a shoulder freeze, developing balance, shoulder stability, and body control.",
+  },
+  {
+    id: "2a9c6e41",
+    name: "Turtle Freeze to Headstand Freeze",
+    category: "Conditioning",
+    description:
+      "A controlled transition from a turtle freeze into a headstand freeze, training balance, core control, and a stable inverted position.",
+  },
+  {
+    id: "b8e1d507",
+    name: "Bridge Holds",
+    category: "Conditioning",
+    description:
+      "A static hold in a bridge position, supported by the hands and feet with the chest facing upward, to build spinal and shoulder mobility and strength.",
+  },
+  {
+    id: "6f2a0c93",
+    name: "Upward Plank Holds - Bent-Knee Variation",
+    category: "Conditioning",
+    description:
+      "A static upward plank hold with the knees bent at approximately 90 degrees and the feet planted, keeping the hips lifted and chest open.",
+  },
+  {
+    id: "d4b7e218",
+    name: "Tuck Planche to L-sit Holds",
+    category: "Conditioning",
+    description:
+      "A controlled transition between a tuck planche and an L-sit, holding each position to build shoulder, arm, and core strength.",
+  },
+  {
+    id: "9e0c3a65",
+    name: "Plank to Pike",
+    category: "Conditioning",
+    description:
+      "A bodyweight exercise moving from a straight-arm plank into a pike by lifting the hips, then returning to plank with control.",
+  },
+  {
+    id: "3a6f1d82",
+    name: "Sit to Upward Plank",
+    category: "Conditioning",
+    description:
+      "A bodyweight transition from a seated position into an upward plank, pressing through the hands and lifting the hips into a straight, chest-up position.",
   },
 ];
 

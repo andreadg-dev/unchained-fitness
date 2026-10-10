@@ -671,72 +671,201 @@ body {
 /* IMPORT WORKOUT SCREEN */
 /*================================*/
 /*================================*/
-
 #import_screen_wrapper {
+  min-height: calc(100vh - 110px);
+  display: flex;
+  align-items: center;
   justify-content: center;
-  margin: auto;
-  text-align: center;
-  border: var(--separator);
-  padding: 2rem;
-  border-radius: var(--radius);
-  background-color: #4e4c4c2b;
+  font-family: "Fira Sans";
+}
+
+#import_screen_wrapper h1 {
+  margin: 0 0 18px;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.05em;
+  color: #f8fafc;
+  font-weight: 800;
+}
+
+#import_screen_panel {
+  width: min(980px, 100%);
+  background: rgba(17, 24, 39, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 28px;
+  padding: clamp(20px, 2vw, 36px);
+  box-shadow: 0 24px 60px rgba(2, 6, 23, 0.45);
+  backdrop-filter: blur(10px);
+}
+
+.import_screen_top,
+.programme_import_box {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 18px;
+  padding: 18px 18px 16px;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
 }
 
 #workout_string_lbl {
-  font-size: 1.4rem;
-  font-weight: bold;
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7dd3fc;
+  margin-bottom: 10px;
 }
 
 #workout_string {
   width: 100%;
-  cursor: text;
-  background-color: rgb(33, 37, 41);
-  color: white;
-  border-radius: 10px;
+  min-height: 120px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(2, 6, 23, 0.45);
+  color: #f8fafc;
+  border-radius: 14px;
+  padding: 14px 16px;
+  resize: vertical;
+  font-size: 0.96rem;
+  line-height: 1.5;
+  font-family: inherit;
   padding: 10px;
   margin-bottom: 1rem;
+  cursor: text;
 }
 
-.import_screen_top {
-  padding-bottom: 2rem;
-  border-bottom: var(--separator);
+#workout_string:focus {
+  outline: none;
+  border-color: rgba(110, 231, 183, 0.8);
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.12);
+}
+
+.import_screen_bottom,
+.programme_import_bottom {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 18px;
+  margin-top: 16px;
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.my_btn {
+  display: flex;
+  gap: 1rem;
+  border: 1px solid;
+  width: 16rem;
+  justify-content: center;
   align-items: center;
+  line-height: 1;
+  height: 3rem;
+  margin: 1rem 0;
+  min-width: 180px;
+  cursor: pointer;
+  font-weight: 400;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
 }
 
-.import_screen_bottom {
-  padding-top: 1rem;
-  margin: auto;
+#import_workout_btn,
+#programme_import_btn {
+  color: white;
+  background-color: #15704e;
+  border-color: #76ff76;
+  align-self: flex-end;
 }
 
-#import_workout_btn {
-  color: rgb(131 215 184);
-  background-color: #306e38;
+#create_workout_btn,
+#programme_new_btn {
+  color: white;
+  background-color: rgb(21 55 157);
+  border-color: #7474ec;
+  width: 26rem;
 }
 
-#import_workout_btn:hover {
-  border-color: rgba(3, 155, 100, 0.644);
+#load_workout_btn,
+#programme_load_state_btn {
+  border-color: #e9be70;
+  background: #8f7119;
+  color: white;
+  width: 26rem;
+}
+
+#import_workout_btn:hover,
+#programme_import_btn:hover {
+  background-color: rgb(1, 75, 1);
   box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.12);
 }
 
-#create_workout_btn {
-  color: rgb(123 173 208);
-  background-color: rgb(26 44 98);
-}
-
-#create_workout_btn:hover {
-  border-color: rgba(0, 98, 255, 0.644);
+#create_workout_btn:hover,
+#programme_new_btn:hover {
+  background-color: rgb(6, 6, 109);
   box-shadow: 0 0 0 3px rgba(45, 81, 212, 0.12);
 }
 
-#load_workout_btn {
-  border: 1px solid #efff00;
-  background: #e0bd405c;
-  color: #efff00;
+#load_workout_btn:hover,
+#programme_load_state_btn:hover {
+  background-color: rgb(109, 72, 5);
+  box-shadow: 0 0 0 3px rgba(212, 159, 45, 0.12);
 }
 
-#load_workout_btn:hover {
-  border-color: rgba(255, 196, 0, 0.644);
-  box-shadow: 0 0 0 3px rgba(212, 159, 45, 0.12);
+#import_screen_wrapper {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 1rem;
+}
+
+#import_screen_panel {
+  box-sizing: border-box;
+  width: min(980px, 100%);
+  min-width: 0;
+}
+
+#workout_string {
+  box-sizing: border-box;
+}
+
+.import_screen_bottom,
+.programme_import_bottom {
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0 1rem;
+}
+
+.import_screen_bottom .my_btn,
+.programme_import_bottom .my_btn {
+  box-sizing: border-box;
+  flex: 1 1 220px;
+  width: auto;
+  min-width: 0;
+}
+
+/* On narrow screens, stack the buttons at full width. */
+@media (max-width: 600px) {
+  #import_screen_panel {
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .import_screen_bottom,
+  .programme_import_bottom {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .import_screen_bottom #create_workout_btn,
+  .import_screen_bottom #load_workout_btn,
+  .programme_import_bottom #programme_new_btn,
+  .programme_import_bottom #programme_load_state_btn {
+    flex: none;
+    width: 100%;
+    margin: 0.5rem 0;
+  }
 }
 
 /*================================*/
