@@ -1418,3 +1418,69 @@ div.noselection:hover {
     font-size: 11px;
   }
 }
+
+.footer-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.footer-social-link svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.footer-social-link:hover {
+  color: #ffffff;
+  border-color: currentColor;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.footer-social-link[aria-label="YouTube"]:hover {
+  color: #ff0033;
+  background: rgba(255, 0, 51, 0.12);
+}
+
+.footer-social-link[aria-label="Instagram"]:hover {
+  color: #e4405f;
+  background: linear-gradient(
+    135deg,
+    rgba(131, 58, 180, 0.2),
+    rgba(225, 48, 108, 0.2),
+    rgba(252, 175, 69, 0.2)
+  );
+}
+
+.footer-social-link[aria-label="GitHub"]:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.footer-social-link:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-social-link {
+    transition: none;
+  }
+
+  .footer-social-link:hover {
+    transform: none;
+  }
+}
