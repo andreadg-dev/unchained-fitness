@@ -674,7 +674,7 @@ function PROGRAMME_LANDING_PAGE() {
 
 function PROGRAMME_WORKOUT_CONFIG() {
   return `
-    <div id="programme_workout_settings" class="programme_settings">
+    <div id="programme_settings" class="programme_settings">
       <div class="programme_title_wrapper">
         <h2>Practice Builder</h2>
       </div>

@@ -223,6 +223,76 @@ const MOVEMENTS = [
     description:
       "A position supported by the arms and legs with the chest facing upwards.",
   },
+  {
+    id: "9c1f7a5e",
+    name: "Turtle Freeze",
+    category: "Freeze",
+    description:
+      "A compact freeze where the body is supported low to the ground with the knees tucked close, emphasizing balance, compression, and control.",
+  },
+  {
+    id: "1f8d6b2a",
+    name: "Coin Drop",
+    category: "PowerMove",
+    description:
+      "A dynamic power move with a spinning drop into the floor, using momentum and timing to create a clean, controlled landing.",
+  },
+  {
+    id: "7a2e9c4f",
+    name: "Head Coin Drop",
+    category: "PowerMove",
+    description:
+      "A variation of the coin drop initiated with the head as part of the rotational entry, requiring strong neck control and precise momentum.",
+  },
+  {
+    id: "4d6b8f1c",
+    name: "Flare",
+    category: "PowerMove",
+    description:
+      "A circular power move performed with continuous leg swings around the body while supported on the hands, demanding rhythm, shoulder power, and hip mobility.",
+  },
+  {
+    id: "c8e4a1b7",
+    name: "Windmill",
+    category: "PowerMove",
+    description:
+      "A classic spinning power move where the body rotates continuously on the upper back and shoulders with legs straddled for momentum.",
+  },
+  {
+    id: "2b7f4e9a",
+    name: "Munchmill",
+    category: "PowerMove",
+    description:
+      "A windmill variation with a tighter body position and accelerated rotational timing, requiring strong core compression and control.",
+  },
+  {
+    id: "e7a1c9d3",
+    name: "Barrelmill",
+    category: "PowerMove",
+    description:
+      "A power move rotation that travels through a barrel-like path across the upper back and shoulders, emphasizing flow and directional control.",
+  },
+  {
+    id: "5e9c2a7d",
+    name: "Backspin",
+    category: "PowerMove",
+    description:
+      "A spinning power move performed on the back with the body kept compact to maintain speed and control through rotation.",
+  },
+  {
+    id: "8f1d3c6b",
+    name: "Jackhammer",
+    category: "PowerMove",
+    description:
+      "A forceful rotational power move driven by momentum from the legs and torso, often used as an explosive entry or transition.",
+  },
+  {
+    id: "3a9e7b2f",
+    name: "Swipe",
+    category: "PowerMove",
+    description:
+      "A sweeping power move where the body launches off the floor into a rotational airborne arc, requiring timing, speed, and coordination.",
+  },
 ];
 
 const MOVEMENTS_SORTED = [...MOVEMENTS].sort((a, b) => {
@@ -335,6 +405,48 @@ const EXERCISES = [
     category: "Conditioning",
     description:
       "A bodyweight transition from a seated position into an upward plank, pressing through the hands and lifting the hips into a straight, chest-up position.",
+  },
+  {
+    id: "c1a7f2b4",
+    name: "Pike Handstand Press",
+    category: "Conditioning",
+    description:
+      "A strength and control drill that presses the body from a piked inverted position into a handstand with emphasis on shoulder engagement, core tension, and balance.",
+  },
+  {
+    id: "d8b4e6a1",
+    name: "Front Lever Holds",
+    category: "Conditioning",
+    description:
+      "A static core and back strength hold where the body remains rigid and horizontal while suspended from a bar or similar support.",
+  },
+  {
+    id: "e4f9a2c7",
+    name: "Headstand to Handstand",
+    category: "Conditioning",
+    description:
+      "A controlled transition from a headstand into a handstand, building inversion strength, shoulder push, and balance.",
+  },
+  {
+    id: "a6d1c8f3",
+    name: "Shoulder Freeze to Headstand",
+    category: "Conditioning",
+    description:
+      "A controlled transition from a shoulder freeze into a headstand, training balance, core stability, and inverted control.",
+  },
+  {
+    id: "f2b7d9e4",
+    name: "Turtle Freeze to Headstand",
+    category: "Conditioning",
+    description:
+      "A controlled transition from a turtle freeze into a headstand, training balance, core control, and a stable inverted position.",
+  },
+  {
+    id: "b3e8a4d9",
+    name: "Turtle Freeze to Elbow Freeze",
+    category: "Conditioning",
+    description:
+      "A controlled transition from a turtle freeze into an elbow freeze, developing balance, shoulder stability, and body control.",
   },
 ];
 

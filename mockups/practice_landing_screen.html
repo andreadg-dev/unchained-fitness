@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Practice Landing Screen</title>
+
+    <!-- Demo dependencies. Remove duplicates if already included in your app. -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+
+
+<style>
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            min-height: 100%;
+            background:
+                radial-gradient(
+                    ellipse at 50% 0%,
+                    rgba(110, 231, 183, 0.09),
+                    transparent 45%
+                ),
+                linear-gradient(180deg, #0b1220 0%, #101827 100%);
+            background-color: var(--app-bg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            color: var(--main-font-color);
+            font-family: var(--main-font-family);
+            font-size: var(--main-font-size);
+            line-height: 1.5;
+            background: transparent;
+			font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+/* =========================================================
+   PRACTICE IMPORT SCREEN
+   Consistent with the dark workout builder theme
+========================================================= */
+
+.programme_import_screen {
+    --practice-bg: rgba(18, 25, 37, 0.94);
+    --practice-raised: #192231;
+    --practice-hover: #202b3b;
+
+    --practice-border: rgba(148, 163, 184, 0.14);
+    --practice-border-hover: rgba(148, 163, 184, 0.28);
+
+    --practice-text: #e5eaf1;
+    --practice-secondary: #a0acbc;
+    --practice-muted: #778498;
+
+    --practice-accent: #6ee7b7;
+    --practice-accent-hover: #8af0c8;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    width: 100%;
+    min-height: 75vh;
+    padding: 48px 24px 64px;
+
+    color: var(--practice-text);
+}
+
+/* =========================================================
+   MAIN PANEL
+========================================================= */
+
+.programme_import_panel {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+
+    width: 100%;
+    max-width: 580px;
+    min-width: 0;
+    padding: 32px;
+
+    border: 1px solid var(--practice-border);
+    border-radius: 20px;
+
+    background: var(--practice-bg);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.16);
+}
+
+/* Page heading */
+
+.programme_import_panel h1 {
+    position: relative;
+
+    margin: 0;
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid var(--practice-border);
+
+    color: var(--practice-text);
+    font-size: clamp(25px, 4vw, 32px);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.8px;
+}
+
+/* Small mint accent under the heading */
+
+.programme_import_panel h1::after {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+
+    width: 46px;
+    height: 2px;
+
+    border-radius: 999px;
+    background: var(--practice-accent);
+
+    content: "";
+}
+
+/* =========================================================
+   IMPORT BOX
+========================================================= */
+
+.programme_import_box {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+
+    min-width: 0;
+    padding: 22px;
+
+    border: 1px solid var(--practice-border);
+    border-radius: 15px;
+
+    background: rgba(11, 18, 32, 0.48);
+}
+
+/* Input label */
+
+.programme_import_box label {
+    color: var(--practice-text);
+    font-size: 14px;
+    font-weight: 750;
+}
+
+/* Base64 textarea */
+
+#programme_base64_input {
+    display: block;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 140px;
+    padding: 14px;
+
+    border: 1px solid var(--practice-border);
+    border-radius: 11px;
+
+    background: #0d1522;
+    color: var(--practice-text);
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+
+    font-size: 0.875rem;
+    line-height: 1.7;
+
+    resize: vertical;
+    overflow-wrap: anywhere;
+
+    transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease,
+        background 160ms ease;
+}
+
+#programme_base64_input::placeholder {
+    color: var(--practice-muted);
+    opacity: 1;
+}
+
+#programme_base64_input:hover {
+    border-color: var(--practice-border-hover);
+}
+
+#programme_base64_input:focus {
+    border-color: rgba(110, 231, 183, 0.65);
+    outline: none;
+
+    box-shadow: 0 0 0 3px rgba(110, 231, 183, 0.09);
+}
+
+#programme_base64_input:focus-visible {
+    outline: 2px solid var(--practice-accent);
+    outline-offset: 3px;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.programme_import_screen .my_btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    min-width: 0;
+    min-height: 48px;
+    padding: 12px 18px;
+
+    border: 1px solid var(--practice-border);
+    border-radius: 11px;
+
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 650;
+    line-height: 1.35;
+    text-align: center;
+
+    cursor: pointer;
+
+    transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease,
+        transform 160ms ease,
+        box-shadow 160ms ease;
+}
+
+.programme_import_screen .my_btn span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.programme_import_screen .my_btn svg {
+    display: block;
+    width: 19px;
+    height: 19px;
+    flex-shrink: 0;
+}
+
+.programme_import_screen .my_btn:active {
+    transform: translateY(1px);
+}
+
+.programme_import_screen .my_btn:focus-visible {
+    outline: 2px solid var(--practice-accent);
+    outline-offset: 3px;
+}
+
+/* Primary action: Import */
+
+#programme_import_btn {
+    width: 100%;
+
+    border-color: var(--practice-accent);
+    background: var(--practice-accent);
+    color: #10251e;
+
+    box-shadow: 0 4px 16px rgba(110, 231, 183, 0.07);
+}
+
+#programme_import_btn:hover {
+    border-color: var(--practice-accent-hover);
+    background: var(--practice-accent-hover);
+
+    box-shadow: 0 6px 20px rgba(110, 231, 183, 0.12);
+}
+
+/* =========================================================
+   BOTTOM ACTIONS
+========================================================= */
+
+.programme_import_bottom {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+
+    width: 100%;
+    min-width: 0;
+    padding-top: 4px;
+}
+
+/* Create practice */
+
+#programme_new_btn {
+    width: 100%;
+
+    border-color: var(--practice-border);
+    background: rgba(110, 231, 183, 0.07);
+    color: #6ee7b7
+}
+
+#programme_new_btn:hover {
+    border-color: var(--practice-border-hover);
+    background: var(--practice-hover);
+    color: var(--practice-accent);
+}
+
+/* Load practice */
+
+#programme_load_state_btn {
+    width: 100%;
+
+    border-color: var(--practice-border);
+    background: transparent;
+    color: var(--practice-secondary);
+}
+
+#programme_load_state_btn:hover {
+    border-color: var(--practice-border-hover);
+    background: var(--practice-raised);
+    color: var(--practice-text);
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 800px) {
+    .programme_import_screen {
+        min-height: auto;
+        padding: 36px 20px 48px;
+    }
+
+    .programme_import_panel {
+        gap: 24px;
+        padding: 28px;
+    }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 520px) {
+    .programme_import_screen {
+        padding: 22px 12px 36px;
+    }
+
+    .programme_import_panel {
+        gap: 22px;
+        padding: 20px 16px;
+
+        border-radius: 16px;
+    }
+
+    .programme_import_panel h1 {
+        padding-bottom: 16px;
+        font-size: 26px;
+    }
+
+    .programme_import_box {
+        gap: 13px;
+        padding: 16px;
+
+        border-radius: 12px;
+    }
+
+    #programme_base64_input {
+        min-height: 125px;
+        padding: 12px;
+        font-size: 12px;
+    }
+
+    .programme_import_screen .my_btn {
+        min-height: 46px;
+        padding: 11px 10px;
+        gap: 7px;
+        font-size: 12px;
+    }
+
+    .programme_import_screen .my_btn svg {
+        width: 17px;
+        height: 17px;
+    }
+
+    .programme_import_bottom {
+        gap: 9px;
+    }
+}
+
+/* Very narrow phones */
+
+@media (max-width: 360px) {
+    .programme_import_screen {
+        padding: 16px 8px 28px;
+    }
+
+    .programme_import_panel {
+        padding: 17px 12px;
+    }
+
+    .programme_import_box {
+        padding: 12px;
+    }
+
+    .programme_import_bottom {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .programme_import_screen .my_btn {
+        min-height: 46px;
+    }
+}
+
+/* Respect reduced-motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+    .programme_import_screen *,
+    .programme_import_screen *::before,
+    .programme_import_screen *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+</style>
+</head>
+<body>
+<div class="programme_import_screen">
+      <div class="programme_import_panel">
+        <h1>Practice</h1>
+
+        <div class="programme_import_box">
+          <label for="programme_base64_input">Import practice</label>
+          <textarea id="programme_base64_input" rows="5" placeholder="Paste a base64-encoded programme JSON here..."></textarea>
+          <button id="programme_import_btn" class="my_btn">
+            <span><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
+  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"></path>
+  <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"></path>
+</svg></span><span>Import Practice</span>
+          </button>
+        </div>
+
+        <div class="programme_import_bottom">
+          <button id="programme_new_btn" class="my_btn" onclick="ProgrammeSelectionScreen()">
+            <span><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"></path>
+</svg></span><span>Create Practice</span>
+          </button>
+        <button id="programme_load_state_btn" class="programme_load_state_btn my_btn" onclick="newProgrammeStatePopup('load')">
+            <span><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-bullseye" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"></path>
+  <path d="M8 13A5 5 0 1 1 8 3a5 5 0 0 1 0 10m0 1A6 6 0 1 0 8 2a6 6 0 0 0 0 12"></path>
+  <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8"></path>
+  <path d="M9.5 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"></path>
+</svg></span><span>Load Practice</span>
+          </button>
+        </div>
+      </div>
+    </div>   
+</body>
+</html>

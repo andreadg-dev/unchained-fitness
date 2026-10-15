@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Workout Builder</title>
+
+    <!-- Demo dependencies. Remove duplicates if already included in your app. -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+
+    <style>
+        /* =========================================================
+           1. DESIGN TOKENS & RESET
+        ========================================================= */
+
+        :root {
+            --app-bg: #0b1220;
+            --panel: rgba(18, 25, 37, 0.94);
+            --panel-raised: #192231;
+            --panel-hover: #202b3b;
+
+            --border: rgba(148, 163, 184, 0.14);
+            --border-hover: rgba(148, 163, 184, 0.28);
+
+            --text: #e5eaf1;
+            --text-secondary: #a0acbc;
+            --text-muted: #778498;
+
+            --accent: #6ee7b7;
+            --accent-hover: #8af0c8;
+            --accent-dark: #153b31;
+
+            --danger: #f28b8b;
+            --danger-bg: rgba(242, 139, 139, 0.10);
+
+            --radius: 16px;
+            --radius-small: 10px;
+
+            --content-width: 1100px;
+
+            --main-font-family:
+                Inter, ui-sans-serif, system-ui, -apple-system,
+                BlinkMacSystemFont, "Segoe UI", sans-serif;
+            --main-font-size: 14px;
+            --main-font-color: var(--text);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            min-height: 100%;
+            background:
+                radial-gradient(
+                    ellipse at 50% 0%,
+                    rgba(110, 231, 183, 0.09),
+                    transparent 45%
+                ),
+                linear-gradient(180deg, #0b1220 0%, #101827 100%);
+            background-color: var(--app-bg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            color: var(--main-font-color);
+            font-family: var(--main-font-family);
+            font-size: var(--main-font-size);
+            line-height: 1.5;
+            background: transparent;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button {
+            color: inherit;
+        }
+
+        button:focus-visible,
+        select:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
+
+        button:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .flex {
+            display: flex;
+            align-items: center;
+        }
+
+        .flex-column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pointer {
+            cursor: pointer;
+        }
+
+        .separator {
+            flex: 0 0 1px;
+            align-self: stretch;
+            background: var(--border);
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* =========================================================
+           2. PAGE LAYOUT
+        ========================================================= */
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            position: relative;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 68px;
+            padding: 0 28px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(11, 18, 32, 0.84);
+            backdrop-filter: blur(16px);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text);
+            font-size: 16px;
+            font-weight: 750;
+            letter-spacing: -0.3px;
+        }
+
+        .brand-mark {
+            display: grid;
+            width: 34px;
+            height: 34px;
+            place-items: center;
+            border-radius: 11px;
+            background: var(--accent);
+            color: #10251e;
+            font-size: 19px;
+            font-weight: 900;
+        }
+
+        .navbar-label {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        #root {
+            width: 100%;
+            max-width: var(--content-width);
+            min-height: 90vh;
+            margin: 0 auto;
+            padding: 32px 24px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 24px;
+        }
+
+        #root > * {
+            min-width: 0;
+        }
+
+        /* =========================================================
+           3. WORKOUT SETTINGS CARD
+        ========================================================= */
+
+        #workout_settings {
+            width: 100%;
+        }
+
+        #workout_config_card {
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--panel);
+            box-shadow: 0 14px 38px rgba(0, 0, 0, 0.12);
+        }
+
+        #workout_config_title {
+            padding: 18px 22px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+            font-size: 15px;
+            font-weight: 750;
+            letter-spacing: -0.2px;
+        }
+
+        #workout_config {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        }
+
+        #workout_config_info,
+        #workout_config_activerest {
+            display: flex;
+            align-items: stretch;
+            gap: 20px;
+            min-width: 0;
+            padding: 22px;
+        }
+
+        #workout_config_info {
+            border-right: 1px solid var(--border);
+        }
+
+        .workout_config_pill {
+            min-width: 0;
+        }
+
+        #workout_config_info .workout_config_pill {
+            flex: 1;
+            gap: 12px;
+        }
+
+        .config_label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--text-secondary);
+        }
+
+        .config_label svg {
+            display: block;
+            width: 21px;
+            height: 21px;
+            stroke: currentColor;
+        }
+
+        #total_count,
+        #total_duration,
+        #seconds_active,
+        #seconds_rest {
+            color: var(--text);
+            font-size: 20px;
+            font-weight: 750;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.6px;
+        }
+
+        .config_value_pill {
+            display: flex;
+            align-items: baseline;
+            gap: 3px;
+            min-width: 0;
+        }
+
+        #total_duration_hidden {
+            display: none;
+        }
+
+        #workout_config_activerest {
+            gap: 16px;
+        }
+
+        #workout_config_activerest > .workout_config_pill {
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .config_active {
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .plusminus_btns {
+            gap: 8px;
+        }
+
+        .plusminus_btns .separator {
+            height: 16px;
+        }
+
+        .plusbtn,
+        .minusbtn {
+            display: grid;
+            width: 30px;
+            height: 30px;
+            place-items: center;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: var(--panel-raised);
+            color: var(--text-secondary);
+            font-size: 18px;
+            line-height: 1;
+            transition:
+                background 160ms ease,
+                border-color 160ms ease,
+                color 160ms ease;
+        }
+
+        .plusbtn:hover,
+        .minusbtn:hover {
+            border-color: var(--border-hover);
+            background: var(--panel-hover);
+            color: var(--accent);
+        }
+
+        /* =========================================================
+           4. EXERCISE LIST
+        ========================================================= */
+
+        #moves_selection {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .move_label {
+            display: grid;
+            grid-template-columns: 36px minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+            padding: 13px 14px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: var(--panel);
+            transition:
+                background 160ms ease,
+                border-color 160ms ease,
+                transform 160ms ease;
+        }
+
+        .move_label:hover {
+            border-color: var(--border-hover);
+            background: rgba(25, 34, 49, 0.98);
+        }
+
+        .move_label > .flex {
+            grid-column: 1;
+            grid-row: 1;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .drag-handle {
+            display: grid;
+            width: 30px;
+            height: 30px;
+            place-items: center;
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-size: 22px;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+        }
+
+        .drag-handle:hover {
+            background: var(--panel-hover);
+            color: var(--text);
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+
+        .remove_move_label {
+            display: grid;
+            width: 30px;
+            height: 30px;
+            place-items: center;
+            border: 0;
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-muted);
+            transition:
+                background 160ms ease,
+                color 160ms ease;
+        }
+
+        .remove_move_label svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+        }
+
+        .remove_move_label:hover {
+            background: var(--danger-bg);
+            color: var(--danger);
+        }
+
+        .move_left {
+            grid-column: 2;
+            grid-row: 1;
+            min-width: 0;
+        }
+
+        .moves-dropdown {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .move_dropdown {
+            display: block;
+            width: 100%;
+            min-width: 0;
+            min-height: 44px;
+            padding: 10px 38px 10px 13px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background-color: #141d2b;
+            color: var(--text);
+            cursor: pointer;
+            outline-offset: 2px;
+        }
+
+        .move_dropdown:hover {
+            border-color: var(--border-hover);
+        }
+
+        .move_dropdown:focus {
+            border-color: rgba(110, 231, 183, 0.65);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(110, 231, 183, 0.09);
+        }
+
+        .move_dropdown option,
+        .move_dropdown optgroup {
+            background: #141d2b;
+            color: var(--text);
+        }
+
+        .move_dropdown option:disabled {
+            color: var(--text-muted);
+        }
+
+        .move_right {
+            grid-column: 3;
+            grid-row: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .increase_move_count_btn,
+        .decrease_move_count_btn {
+            display: grid;
+            width: 34px;
+            height: 34px;
+            flex-shrink: 0;
+            place-items: center;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--panel-raised);
+            color: var(--text-secondary);
+            transition:
+                background 160ms ease,
+                border-color 160ms ease,
+                color 160ms ease;
+        }
+
+        .increase_move_count_btn svg,
+        .decrease_move_count_btn svg {
+            display: block;
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+        }
+
+        .increase_move_count_btn:hover,
+        .decrease_move_count_btn:hover {
+            border-color: rgba(110, 231, 183, 0.35);
+            background: var(--accent-dark);
+            color: var(--accent);
+        }
+
+        .move_count {
+            min-width: 18px;
+            color: var(--text);
+            font-size: 15px;
+            font-weight: 750;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .sortable-ghost {
+            opacity: 0.35;
+            border: 1px dashed var(--accent);
+        }
+
+        .sortable-chosen {
+            border-color: rgba(110, 231, 183, 0.45);
+        }
+
+        /* =========================================================
+           5. FORM ACTION BUTTONS
+        ========================================================= */
+
+        #form_buttons {
+            width: 100%;
+        }
+
+        #form_buttons > .flex-column {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr);
+            gap: 10px;
+            width: 100%;
+        }
+
+        .my_btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            min-height: 48px;
+            padding: 12px 20px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 750;
+            letter-spacing: 0.1px;
+            cursor: pointer;
+            user-select: none;
+            transition:
+                transform 160ms ease,
+                background 160ms ease,
+                border-color 160ms ease,
+                box-shadow 160ms ease;
+        }
+
+        .my_btn svg {
+            display: block;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            stroke: currentColor;
+        }
+
+        .my_btn:active {
+            transform: translateY(1px);
+        }
+
+        .add_btn {
+            width: 50px;
+            padding: 0;
+            background: var(--panel);
+            color: var(--text-secondary);
+        }
+
+        .add_btn:hover {
+            border-color: var(--border-hover);
+            background: var(--panel-hover);
+            color: var(--accent);
+        }
+
+        .play_btn {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #10251e;
+            box-shadow: 0 4px 16px rgba(110, 231, 183, 0.08);
+        }
+
+        .play_btn:hover {
+            background: var(--accent-hover);
+            border-color: var(--accent-hover);
+            box-shadow: 0 5px 20px rgba(110, 231, 183, 0.15);
+        }
+
+        .save_btn {
+            background: var(--panel);
+            color: var(--text);
+        }
+
+        .save_btn:hover {
+            border-color: var(--border-hover);
+            background: var(--panel-hover);
+        }
+
+        /* =========================================================
+           6. FOOTER & DEMO NOTICES
+        ========================================================= */
+
+        .app-footer {
+            margin-top: auto;
+            padding: 18px 24px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .demo-notice {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        /* =========================================================
+           7. RESPONSIVE LAYOUT
+        ========================================================= */
+
+        @media (max-width: 800px) {
+            #root {
+                padding: 26px 18px 36px;
+                gap: 20px;
+            }
+
+            #workout_config {
+                grid-template-columns: 1fr;
+            }
+
+            #workout_config_info {
+                border-right: 0;
+                border-bottom: 1px solid var(--border);
+            }
+
+            #workout_config_info,
+            #workout_config_activerest {
+                padding: 18px;
+            }
+
+            #workout_config_info {
+                gap: 24px;
+            }
+
+            #workout_config_activerest {
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .navbar {
+                min-height: 60px;
+                padding: 0 16px;
+            }
+
+            .navbar-label {
+                font-size: 11px;
+            }
+
+            #root {
+                padding: 20px 12px 28px;
+                gap: 16px;
+            }
+
+            #workout_config_title {
+                padding: 15px 16px;
+            }
+
+            #workout_config_info {
+                gap: 14px;
+                padding: 16px 12px;
+            }
+
+            #workout_config_info .workout_config_pill {
+                gap: 8px;
+            }
+
+            #workout_config_activerest {
+                gap: 10px;
+                padding: 16px 10px;
+            }
+
+            #workout_config_activerest > .separator {
+                margin: 0 1px;
+            }
+
+            .config_label svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            #total_count,
+            #total_duration,
+            #seconds_active,
+            #seconds_rest {
+                font-size: 18px;
+            }
+
+            .config_active {
+                gap: 5px;
+            }
+
+            .plusminus_btns {
+                gap: 5px;
+            }
+
+            .plusbtn,
+            .minusbtn {
+                width: 28px;
+                height: 28px;
+            }
+
+            .move_label {
+                grid-template-columns: 28px minmax(0, 1fr);
+                gap: 8px;
+                padding: 10px;
+            }
+
+            .move_label > .flex {
+                grid-column: 1;
+                grid-row: 1 / span 2;
+                gap: 8px;
+            }
+
+            .drag-handle,
+            .remove_move_label {
+                width: 28px;
+                height: 28px;
+            }
+
+            .move_left {
+                grid-column: 2;
+                grid-row: 1;
+            }
+
+            .move_dropdown {
+                min-height: 42px;
+                padding: 9px 30px 9px 10px;
+                font-size: 13px;
+            }
+
+            .move_right {
+                grid-column: 2;
+                grid-row: 2;
+                justify-content: flex-start;
+                gap: 10px;
+                padding-top: 2px;
+            }
+
+            .increase_move_count_btn,
+            .decrease_move_count_btn {
+                width: 32px;
+                height: 32px;
+            }
+
+            #form_buttons > .flex-column {
+                grid-template-columns: 48px minmax(0, 1fr);
+                gap: 8px;
+            }
+
+            .add_btn {
+                width: 48px;
+                min-height: 46px;
+            }
+
+            .play_btn,
+            .save_btn {
+                min-height: 46px;
+                padding: 10px 12px;
+            }
+
+            .play_btn {
+                grid-column: 2;
+                grid-row: 1;
+            }
+
+            .save_btn {
+                grid-column: 2;
+                grid-row: 2;
+            }
+
+            .add_btn {
+                grid-column: 1;
+                grid-row: 1 / span 2;
+                height: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div id="app">
+
+    <header class="navbar">
+        <div class="navbar-brand">
+            <div class="brand-mark" aria-hidden="true">↗</div>
+            <span>Workout Builder</span>
+        </div>
+
+        <div class="navbar-label">Training session</div>
+    </header>
+
+    <main id="root">
+
+        <!-- WORKOUT SETTINGS -->
+        <section id="workout_settings" aria-labelledby="workout_config_title">
+            <div id="workout_config_card">
+
+                <div id="workout_config_title">Workout Settings</div>
+
+                <div id="workout_config">
+
+                    <div id="workout_config_info">
+
+                        <div id="total_exercise_count" class="workout_config_pill flex">
+                            <div class="config_label"
+                                 aria-label="Total exercises"
+                                 title="Total exercises">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="1.8"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     aria-hidden="true">
+                                    <path d="M9 6h11M9 12h11M9 18h11"/>
+                                    <path d="M4 6h.01M4 12h.01M4 18h.01"/>
+                                </svg>
+                            </div>
+                            <div id="total_count">3</div>
+                        </div>
+
+                        <div class="separator" aria-hidden="true"></div>
+
+                        <div id="total_session_duration" class="workout_config_pill flex">
+                            <div class="config_label"
+                                 aria-label="Total workout duration"
+                                 title="Total workout duration">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="1.8"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     aria-hidden="true">
+                                    <circle cx="12" cy="13" r="8"/>
+                                    <path d="M12 9v4l2.5 1.5M9 2h6M12 2v3"/>
+                                </svg>
+                            </div>
+                            <div class="config_value_pill">
+                                <div id="total_duration">2' 45"</div>
+                                <div id="total_duration_hidden">165</div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div id="workout_config_activerest">
+
+                        <div id="seconds_exercises" class="workout_config_pill flex-column">
+                            <div class="config_active flex">
+                                <div class="config_label"
+                                     aria-label="Exercise duration in seconds"
+                                     title="Exercise duration">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 24 24"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="1.8"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         aria-hidden="true">
+                                        <circle cx="12" cy="13" r="8"/>
+                                        <path d="M12 9v4l2 1.5"/>
+                                    </svg>
+                                </div>
+                                <div class="config_value_pill">
+                                    <div id="seconds_active">25</div>
+                                    <div>"</div>
+                                </div>
+                            </div>
+
+                            <div class="plusminus_btns flex">
+                                <button type="button"
+                                        class="plusbtn"
+                                        aria-label="Increase exercise duration"
+                                        title="Increase exercise duration"
+                                        onclick="updateActiveRestTime(this, 'plus'); updateWorkoutSettings(null, calculateTotalWorkoutDuration())">+</button>
+
+                                <div class="separator" aria-hidden="true"></div>
+
+                                <button type="button"
+                                        class="minusbtn"
+                                        aria-label="Decrease exercise duration"
+                                        title="Decrease exercise duration"
+                                        onclick="updateActiveRestTime(this, 'minus'); updateWorkoutSettings(null, calculateTotalWorkoutDuration())">−</button>
+                            </div>
+                        </div>
+
+                        <div class="separator" aria-hidden="true"></div>
+
+                        <div id="seconds_rest_duration" class="workout_config_pill flex-column">
+                            <div class="config_active flex">
+                                <div class="config_label"
+                                     aria-label="Rest duration in seconds"
+                                     title="Rest duration">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 24 24"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="1.8"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         aria-hidden="true">
+                                        <path d="M12 3v3M7 3h10"/>
+                                        <circle cx="12" cy="14" r="7"/>
+                                        <path d="M12 11v3l2 1.5"/>
+                                    </svg>
+                                </div>
+                                <div class="config_value_pill">
+                                    <div id="seconds_rest">10</div>
+                                    <div>"</div>
+                                </div>
+                            </div>
+
+                            <div class="plusminus_btns flex">
+                                <button type="button"
+                                        class="plusbtn"
+                                        aria-label="Increase rest duration"
+                                        title="Increase rest duration"
+                                        onclick="updateRestTime(this, 'plus'); updateWorkoutSettings(null, calculateTotalWorkoutDuration())">+</button>
+
+                                <div class="separator" aria-hidden="true"></div>
+
+                                <button type="button"
+                                        class="minusbtn"
+                                        aria-label="Decrease rest duration"
+                                        title="Decrease rest duration"
+                                        onclick="updateRestTime(this, 'minus'); updateWorkoutSettings(null, calculateTotalWorkoutDuration())">−</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXERCISE SELECTION -->
+        <section id="moves_selection" aria-label="Workout exercises">
+
+            <article class="move_label okselection">
+                <div class="flex">
+                    <div class="drag-handle"
+                         title="Drag to reorder"
+                         aria-label="Drag to reorder"
+                         role="img">⠿</div>
+
+                    <button type="button"
+                            class="remove_move_label pointer"
+                            aria-label="Remove exercise"
+                            title="Remove exercise"
+                            onclick="removeMoveLabel(this); updateWorkoutSettings(calculateTotalExerciseCount())">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             aria-hidden="true">
+                            <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>
+                            <path d="M10 10v6M14 10v6"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="move_left">
+                    <div class="moves-dropdown">
+                        <label class="sr-only">Exercise 1</label>
+                        <select name="movements" class="move_dropdown pointer">
+                            <option value="">-- Choose an exercise --</option>
+                            <optgroup label="Footwork">
+                                <option value="6-step">6-step</option>
+                                <option value="3-step">3-step</option>
+                                <option value="cc">CC</option>
+                                <option value="kick-out">Kick-out</option>
+                            </optgroup>
+                            <optgroup label="Freeze">
+                                <option value="baby-freeze">Baby Freeze</option>
+                                <option value="chair-freeze">Chair Freeze</option>
+                                <option value="shoulder-freeze">Shoulder Freeze</option>
+                            </optgroup>
+                            <optgroup label="Toprock">
+                                <option value="indian-step">Indian Step</option>
+                                <option value="cross-step">Cross Step</option>
+                                <option value="side-step">Side Step</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="move_right">
+                    <button type="button"
+                            class="increase_move_count_btn pointer"
+                            aria-label="Increase repetitions"
+                            title="Increase repetitions"
+                            onclick="increaseMoveCount(this); updateWorkoutSettings(calculateTotalExerciseCount()); updateWorkoutSettings(null, calculateTotalWorkoutDuration())">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             aria-hidden="true">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                    </button>
+
+                    <span class="move_count" aria-live="polite">1</span>
+
+                    <button type="button"
+                            class="decrease_move_count_btn pointer"
+                            aria-label="Decrease repetitions"
+                            title="Decrease repetitions"
+                            onclick="decreaseMoveCount(this); updateWorkoutSettings(calculateTotalExerciseCount()); updateWorkoutSettings(null, calculateTotalWorkoutDuration())">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             aria-hidden="true">
+                            <path d="M5 12h14"/>
+                        </svg>
+                    </button>
+                </div>
+            </article>
+
+            <article class="move_label okselection">
+                <div class="flex">
+                    <div class="drag-handle"
+                         title="Drag to reorder"
+                         aria-label="Drag to reorder"
+                         role="img">⠿</div>
+
+                    <button type="button"
+                            class="remove_move_label pointer"
+                            aria-label="Remove exercise"
+                            title="Remove exercise"
+                            onclick="removeMoveLabel(this); updateWorkoutSettings(calculateTotalExerciseCount())">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             aria-hidden="true">
+                            <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>
+                            <path d="M10 10v6M14 10v6"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="move_left">
+                    <div class="moves-dropdown">
+                        <label class="sr-only">Exercise 2</label>
+                        <select name="movements" class="move_dropdown pointer">
+                            <option value="">-- Choose an exercise --</option>
+                            <optgroup label="Footwork">
+                                <option value="6-step">6-step</option>
+                                <option value="3-step">3-step</option>
+                                <option value="cc">CC</option>
+                                <option value="kick-out">Kick-out</option>
+                            </optgroup>
+                            <optgroup label="Freeze">
+                                <option value="baby-freeze">Baby Freeze</option>
+                                <option value="chair-freeze">Chair Freeze</option>
+                                <option value="shoulder-freeze">Shoulder Freeze</option>
+                            </optgroup>
+                            <optgroup label="Toprock">
+                                <option value="indian-step">Indian Step</option>
+                                <option value="cross-step">Cross Step</option>
+                                <option value="side-step">Side Step</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="move_right">
+                    <button type="button"
+                            class="increase_move_count_btn pointer"
+                            aria-label="Increase repetitions"
+                            title="Increase repetitions"
+                            onclick="increaseMoveCount(this); updateWorkoutSettings(calculateTotalExerciseCount()); updateWorkoutSettings(null, calculateTotalWorkoutDuration())">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             aria-hidden="true">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                    </button>
+
+                    <span class="move_count" aria-live="polite">1</span>
+
+                    <button type="button"
+                            class="decrease_move_count_btn pointer"
+                            aria-label="Decrease repetitions"
+                            title="Decrease repetitions"
+                            onclick="decreaseMoveCount(this); updateWorkoutSettings(calculateTotalExerciseCount()); updateWorkoutSettings(null, calculateTotalWorkoutDuration())">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             aria-hidden="true">
+                            <path d="M5 12h14"/>
+                        </svg>
+                    </button>
+                </div>
+            </article>
+
+            <article class="move_label okselection">
+                <div class="flex">
+                    <div class="drag-handle"
+                         title="Drag to reorder"
+                         aria-label="Drag to reorder"
+                         role="img">⠿</div>
+
+                    <button type="button"
+                            class="remove_move_label pointer"
+                            aria-label="Remove exercise"
+                            title="Remove exercise"
+                            onclick="removeMoveLabel(this); updateWorkoutSettings(calculateTotalExerciseCount())">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             aria-hidden="true">
+                            <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>
+                            <path d="M10 10v6M14 10v6"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="move_left">
+                    <div class="moves-dropdown">
+                        <label class="sr-only">Exercise 3</label>
+                        <select name="movements" class="move_dropdown pointer">
+                            <option value="">-- Choose an exercise --</option>
+                            <optgroup label="Footwork">
+                                <option value="6-step">6-step</option>
+                                <option value="3-step">3-step</option>
+                                <option value="cc">CC</option>
+                                <option value="kick-out">Kick-out</option>
+                            </optgroup>
+                            <optgroup label="Freeze">
+                                <option value="baby-freeze">Baby Freeze</option>
+                                <option value="chair-freeze">Chair Freeze</option>
+                                <option value="shoulder-freeze">Shoulder Freeze</option>
+                            </optgroup>
+                            <optgroup label="Toprock">
+                                <option value="indian-step">Indian Step</option>
+                                <option value="cross-step">Cross Step</option>
+                                <option value="side-step">Side Step</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="move_right">
+                    <button type="button"
+                            class="increase_move_count_btn pointer"
+                            aria-label="Increase repetitions"
+                            title="Increase repetitions"
+                            onclick="increaseMoveCount(this); updateWorkoutSettings(calculateTotalExerciseCount()); updateWorkoutSettings(null, calculateTotalWorkoutDuration())">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             aria-hidden="true">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                    </button>
+
+                    <span class="move_count" aria-live="polite">1</span>
+
+                    <button type="button"
+                            class="decrease_move_count_btn pointer"
+                            aria-label="Decrease repetitions"
+                            title="Decrease repetitions"
+                            onclick="decreaseMoveCount(this); updateWorkoutSettings(calculateTotalExerciseCount()); updateWorkoutSettings(null, calculateTotalWorkoutDuration())">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             aria-hidden="true">
+                            <path d="M5 12h14"/>
+                        </svg>
+                    </button>
+                </div>
+            </article>
+
+        </section>
+
+        <!-- ACTIONS -->
+        <section id="form_buttons" aria-label="Workout actions">
+            <div class="flex-column">
+
+                <button type="button"
+                        class="add_btn my_btn pointer"
+                        aria-label="Add exercise"
+                        title="Add exercise"
+                        onclick="addMoveLabel(this)">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         aria-hidden="true">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                </button>
+
+                <button type="button"
+                        class="play_btn my_btn pointer"
+                        onclick="PlayScreen()">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         aria-hidden="true">
+                        <path d="m8 5 12 7-12 7z"/>
+                    </svg>
+                    <span>PLAY WORKOUT</span>
+                </button>
+
+                <button type="button"
+                        class="save_btn my_btn pointer"
+                        onclick="newSessionStatePopup('save')">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="1.8"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         aria-hidden="true">
+                        <path d="M5 3h12l4 4v14H3V3z"/>
+                        <path d="M7 3v6h10V3M7 21v-8h10v8"/>
+                    </svg>
+                    <span>SAVE WORKOUT</span>
+                </button>
+
+            </div>
+        </section>
+
+        <p class="demo-notice">
+            Demo version · Workout changes are not saved after refreshing.
+        </p>
+
+    </main>
+
+    <footer class="app-footer">
+        Workout Builder · Build your session, one move at a time.
+    </footer>
+
+</div>
+
+<script>
+    /* =========================================================
+       DEMO JAVASCRIPT
+       Replace these functions with your existing app functions
+       when integrating this page into your real project.
+    ========================================================= */
+
+    const MIN_TIME = 5;
+    const MAX_TIME = 600;
+    const TIME_STEP = 5;
+    const MIN_MOVE_COUNT = 1;
+    const MAX_MOVE_COUNT = 99;
+
+    function getNumber(selector, fallback = 0) {
+        const value = Number($(selector).first().text());
+        return Number.isFinite(value) ? value : fallback;
+    }
+
+    function formatDuration(totalSeconds) {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return minutes + "' " + String(seconds).padStart(2, "0") + '"';
+    }
+
+    function calculateTotalExerciseCount() {
+        let total = 0;
+
+        $("#moves_selection .move_label").each(function () {
+            const count = parseInt($(this).find(".move_count").text(), 10) || 1;
+            total += Math.max(1, count);
+        });
+
+        return total;
+    }
+
+    function calculateTotalWorkoutDuration() {
+        const activeSeconds = getNumber("#seconds_active", 25);
+        const restSeconds = getNumber("#seconds_rest", 10);
+        const rows = $("#moves_selection .move_label");
+        let total = 0;
+        let totalRepetitions = 0;
+
+        rows.each(function () {
+            const count = parseInt($(this).find(".move_count").text(), 10) || 1;
+
+            total += Math.max(1, count) * activeSeconds;
+            totalRepetitions += Math.max(1, count);
+        });
+
+        // Add a rest interval between repetitions, but not after the final one.
+        total += Math.max(0, totalRepetitions - 1) * restSeconds;
+
+        return total;
+    }
+
+    function updateWorkoutSettings(exerciseCount, duration) {
+        if (exerciseCount !== null && exerciseCount !== undefined) {
+            $("#total_count").text(exerciseCount);
+        } else {
+            $("#total_count").text(calculateTotalExerciseCount());
+        }
+
+        const totalSeconds =
+            duration !== null && duration !== undefined
+                ? duration
+                : calculateTotalWorkoutDuration();
+
+        $("#total_duration").text(formatDuration(totalSeconds));
+        $("#total_duration_hidden").text(totalSeconds);
+    }
+
+    function updateActiveRestTime(button, direction) {
+        const current = getNumber("#seconds_active", 25);
+        const delta = direction === "plus" ? TIME_STEP : -TIME_STEP;
+        const next = Math.max(MIN_TIME, Math.min(MAX_TIME, current + delta));
+
+        $("#seconds_active").text(next);
+        updateWorkoutSettings(null, calculateTotalWorkoutDuration());
+    }
+
+    function updateRestTime(button, direction) {
+        const current = getNumber("#seconds_rest", 10);
+        const delta = direction === "plus" ? TIME_STEP : -TIME_STEP;
+        const next = Math.max(MIN_TIME, Math.min(MAX_TIME, current + delta));
+
+        $("#seconds_rest").text(next);
+        updateWorkoutSettings(null, calculateTotalWorkoutDuration());
+    }
+
+    function increaseMoveCount(button) {
+        const countElement = $(button).siblings(".move_count");
+        const current = parseInt(countElement.text(), 10) || 1;
+
+        if (current < MAX_MOVE_COUNT) {
+            countElement.text(current + 1);
+        }
+
+        updateWorkoutSettings(
+            calculateTotalExerciseCount(),
+            calculateTotalWorkoutDuration()
+        );
+    }
+
+    function decreaseMoveCount(button) {
+        const countElement = $(button).siblings(".move_count");
+        const current = parseInt(countElement.text(), 10) || 1;
+
+        if (current > MIN_MOVE_COUNT) {
+            countElement.text(current - 1);
+        }
+
+        updateWorkoutSettings(
+            calculateTotalExerciseCount(),
+            calculateTotalWorkoutDuration()
+        );
+    }
+
+    function removeMoveLabel(button) {
+        const rows = $("#moves_selection .move_label");
+
+        if (rows.length <= 1) {
+            alert("Keep at least one exercise in your workout.");
+            return;
+        }
+
+        $(button).closest(".move_label").remove();
+        updateWorkoutSettings(
+            calculateTotalExerciseCount(),
+            calculateTotalWorkoutDuration()
+        );
+    }
+
+    function addMoveLabel(button) {
+        const template = $("#moves_selection .move_label").first().clone();
+
+        template.find("select").val("");
+        template.find(".move_count").text("1");
+
+        $("#moves_selection").append(template);
+
+        updateWorkoutSettings(
+            calculateTotalExerciseCount(),
+            calculateTotalWorkoutDuration()
+        );
+
+        template.find("select").trigger("focus");
+    }
+
+    function PlayScreen() {
+        const exerciseCount = calculateTotalExerciseCount();
+        const duration = calculateTotalWorkoutDuration();
+
+        alert(
+            "Demo: Play Workout\n\n" +
+            "Exercises/repetitions: " + exerciseCount + "\n" +
+            "Estimated duration: " + formatDuration(duration) + "\n\n" +
+            "Connect your existing PlayScreen() logic here."
+        );
+    }
+
+    function newSessionStatePopup(action) {
+        if (action === "save") {
+            alert(
+                "Demo: Save Workout\n\n" +
+                "Connect your existing newSessionStatePopup('save') logic here."
+            );
+        }
+    }
+
+    $(function () {
+        updateWorkoutSettings(
+            calculateTotalExerciseCount(),
+            calculateTotalWorkoutDuration()
+        );
+
+        // Drag-and-drop reordering, using the visible drag handle.
+        if (typeof Sortable !== "undefined") {
+            new Sortable(document.getElementById("moves_selection"), {
+                handle: ".drag-handle",
+                animation: 160,
+                ghostClass: "sortable-ghost",
+                chosenClass: "sortable-chosen",
+                onEnd: function () {
+                    updateWorkoutSettings(
+                        calculateTotalExerciseCount(),
+                        calculateTotalWorkoutDuration()
+                    );
+                }
+            });
+        }
+
+        // Keep totals updated if an exercise selection changes.
+        $("#moves_selection").on("change", ".move_dropdown", function () {
+            updateWorkoutSettings(
+                calculateTotalExerciseCount(),
+                calculateTotalWorkoutDuration()
+            );
+        });
+    });
+</script>
+
+</body>
+</html>

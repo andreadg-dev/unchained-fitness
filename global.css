@@ -698,8 +698,7 @@ body {
   backdrop-filter: blur(10px);
 }
 
-.import_screen_top,
-.programme_import_box {
+.import_screen_top {
   background: rgba(15, 23, 42, 0.7);
   border: 1px solid rgba(148, 163, 184, 0.16);
   border-radius: 18px;
@@ -742,8 +741,7 @@ body {
   box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.12);
 }
 
-.import_screen_bottom,
-.programme_import_bottom {
+.import_screen_bottom {
   background: rgba(15, 23, 42, 0.7);
   border: 1px solid rgba(148, 163, 184, 0.16);
   border-radius: 18px;
@@ -772,8 +770,7 @@ body {
   border-radius: 0.25rem;
 }
 
-#import_workout_btn,
-#programme_import_btn {
+#import_workout_btn {
   color: white;
   background-color: #15704e;
   border-color: #76ff76;
@@ -796,8 +793,7 @@ body {
   width: 26rem;
 }
 
-#import_workout_btn:hover,
-#programme_import_btn:hover {
+#import_workout_btn:hover {
   background-color: rgb(1, 75, 1);
   box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.12);
 }
@@ -830,15 +826,13 @@ body {
   box-sizing: border-box;
 }
 
-.import_screen_bottom,
-.programme_import_bottom {
+.import_screen_bottom {
   flex-wrap: wrap;
   gap: 1rem;
   padding: 0 1rem;
 }
 
-.import_screen_bottom .my_btn,
-.programme_import_bottom .my_btn {
+.import_screen_bottom .my_btn {
   box-sizing: border-box;
   flex: 1 1 220px;
   width: auto;
@@ -852,16 +846,13 @@ body {
     border-radius: 20px;
   }
 
-  .import_screen_bottom,
-  .programme_import_bottom {
+  .import_screen_bottom {
     flex-direction: column;
     padding: 1rem;
   }
 
   .import_screen_bottom #create_workout_btn,
-  .import_screen_bottom #load_workout_btn,
-  .programme_import_bottom #programme_new_btn,
-  .programme_import_bottom #programme_load_state_btn {
+  .import_screen_bottom #load_workout_btn {
     flex: none;
     width: 100%;
     margin: 0.5rem 0;
@@ -1180,8 +1171,13 @@ div.noselection:hover {
 /*================================*/
 /*================================*/
 
+#movercises_overview_wrapper {
+  margin: 2rem 0;
+}
+
 .move_overview {
   font-family: "Fira Code";
+  margin: 1.5rem 0;
 }
 
 .move_overview_header {

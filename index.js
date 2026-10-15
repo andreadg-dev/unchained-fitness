@@ -292,14 +292,22 @@ function copyToClipboard(element) {
 }
 
 function navbarMenuState() {
-  // Prevent clicks inside the menu from closing it
-  $("#navbar_menu").on("click", function (e) {
-    e.stopPropagation();
+  const menu = $("#navbar_menu");
+
+  // Toggle the menu when clicking its summary
+  menu.children("summary").on("click", function (event) {
+    // Let the browser handle the native <details> toggle
+    // No manual open/close logic is needed
   });
 
-  // Close menu when clicking anywhere else
+  // Prevent clicks inside the menu from bubbling to the document
+  menu.on("click", function (event) {
+    event.stopPropagation();
+  });
+
+  // Close the menu when clicking anywhere outside it
   $(document).on("click", function () {
-    $("#navbar_menu").prop("open", false);
+    menu.prop("open", false);
   });
 }
 
@@ -1013,7 +1021,9 @@ function MoveOverviewScreen(movesOrExercises) {
     );
   });
 
-  $("#root").append(movercisesOverview.join(""));
+  $("#root").append(
+    `<div id="movercises_overview_wrapper">${movercisesOverview.join("")}</div>`,
+  );
 
   // Closes the navbar menu
   $("#navbar_menu").prop("open", false);
@@ -1446,10 +1456,11 @@ function ProgrammeSelectionScreen(sessionBase64String) {
 
   try {
     $("#root").empty();
-    $("#root").append(`
-      <div id="programme_workout_settings"></div>
-      <div id="programme_moves_selection"></div>
-      <div id="programme_form_buttons"></div>
+    $("#root").append(`<div id="programme_workout_builder_wrapper">
+        <div id="programme_workout_settings"></div>
+        <div id="programme_moves_selection"></div>
+        <div id="programme_form_buttons"></div>
+      </div>
     `);
 
     $("#programme_workout_settings").append(PROGRAMME_WORKOUT_CONFIG());
@@ -1606,15 +1617,99 @@ function StartProgrammeWorkout() {
 
   $("#root").append(`
     <div class="programme_training_wrapper">
-      <h2>Programme Workout</h2>
+            <!-- Practice header -->
+      <div class="programme_training_header">
+        <div class="programme_training_heading">
+          <span class="programme_training_eyebrow">YOUR PRACTICE</span>
+          <h2>Programme Workout</h2>
+          <p>Work through each exercise at your own pace.</p>
+        </div>
+
+        <div class="programme_training_progress">
+          <div class="programme_progress_count">
+            <span id="programme_completed_count">0</span>
+            <span class="programme_progress_divider">/</span>
+            <span id="programme_exercise_count">3</span>
+            <span class="programme_progress_label">completed</span>
+          </div>
+
+          <div
+            class="programme_progress_track"
+            role="progressbar"
+            aria-label="Practice completion"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+            id="programme_progress_track"
+          >
+            <div id="programme_progress_bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise checklist -->
       <div class="programme_training_grid">${cards}</div>
+
+      <!-- Completion message; shown when all exercises are checked -->
+      <div
+        id="programme_completion_message"
+        class="programme_completion_message"
+        role="status"
+        aria-live="polite"
+        hidden
+      >
+        <span class="programme_completion_icon">✓</span>
+        <div>
+          <strong>Practice complete!</strong>
+          <p>Great work. You've completed every exercise.</p>
+        </div>
+      </div>
     </div>
   `);
 
-  $(document).on("change", ".programme_exercise_check", function () {
+  /*   $(document).on("change", ".programme_exercise_check", function () {
     const card = $(this).closest(".programme_exercise_card");
     const isChecked = $(this).is(":checked");
 
     card.toggleClass("programme_completed", isChecked);
+  }); */
+
+  programmePlayerScreenFunc();
+}
+
+function programmePlayerScreenFunc() {
+  const $wrapper = $(".programme_training_wrapper");
+  if (!$wrapper.length) return;
+
+  function updateProgrammeProgress() {
+    const total = $wrapper.find(".programme_exercise_card").length;
+    const completed = $wrapper.find(".programme_exercise_check:checked").length;
+    const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+    $("#programme_completed_count").text(completed);
+    $("#programme_exercise_count").text(total);
+    $("#programme_progress_bar").css("width", percentage + "%");
+    $("#programme_progress_track").attr("aria-valuenow", percentage);
+    $("#programme_completion_message").prop(
+      "hidden",
+      total === 0 || completed !== total,
+    );
+  }
+
+  // .off() prevents duplicate handlers if the screen is rebuilt
+  $wrapper
+    .off("change.programme")
+    .on("change.programme", ".programme_exercise_check", function () {
+      $(this)
+        .closest(".programme_exercise_card")
+        .toggleClass("is-complete", this.checked);
+      updateProgrammeProgress();
+    });
+
+  $wrapper.find(".programme_exercise_check").each(function () {
+    $(this)
+      .closest(".programme_exercise_card")
+      .toggleClass("is-complete", this.checked);
   });
+  updateProgrammeProgress();
 }

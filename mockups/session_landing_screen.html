@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Session Landing Screen</title>
+
+    <!-- Demo dependencies. Remove duplicates if already included in your app. -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+
+
+<style>
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            min-height: 100%;
+            background:
+                radial-gradient(
+                    ellipse at 50% 0%,
+                    rgba(110, 231, 183, 0.09),
+                    transparent 45%
+                ),
+                linear-gradient(180deg, #0b1220 0%, #101827 100%);
+            background-color: var(--app-bg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            color: var(--main-font-color);
+            font-family: var(--main-font-family);
+            font-size: var(--main-font-size);
+            line-height: 1.5;
+            background: transparent;
+			font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+		
+		
+
+/* ========================================
+   Session Import Screen
+   Scoped to avoid affecting other screens
+======================================== */
+
+#import_screen_wrapper {
+    --import-bg: #0b1220;
+    --import-panel: rgba(18, 25, 37, 0.94);
+    --import-panel-raised: #192231;
+    --import-panel-hover: #202b3b;
+    --import-border: rgba(148, 163, 184, 0.14);
+    --import-border-hover: rgba(148, 163, 184, 0.28);
+    --import-text: #e5eaf1;
+    --import-text-secondary: #a0acbc;
+    --import-text-muted: #778498;
+    --import-accent: #6ee7b7;
+    --import-accent-hover: #8af0c8;
+
+    width: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+    padding: 40px 20px 48px;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    color: var(--import-text);
+    font-family: var(--main-font-family, inherit);
+}
+
+#import_screen_wrapper *,
+#import_screen_wrapper *::before,
+#import_screen_wrapper *::after {
+    box-sizing: border-box;
+}
+
+/* Main panel */
+
+#import_screen_panel {
+    width: 100%;
+    max-width: 580px;
+    min-width: 0;
+    padding: 32px;
+
+    background: var(--import-panel);
+    border: 1px solid var(--import-border);
+    border-radius: 22px;
+
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.025);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+/* Heading */
+
+#import_screen_panel h1 {
+    position: relative;
+    margin: 0 0 30px;
+    padding-bottom: 18px;
+
+    color: var(--import-text);
+    font-size: clamp(1.65rem, 4vw, 2rem);
+    font-weight: 750;
+    line-height: 1.2;
+    letter-spacing: -0.045em;
+	border-bottom: 1px solid var(--import-border);
+}
+
+#import_screen_panel h1::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 46px;
+    height: 3px;
+    border-radius: 999px;
+
+    background: var(--import-accent);
+    box-shadow: 0 0 14px rgba(110, 231, 183, 0.2);
+}
+
+/* Import section */
+
+#import_screen_panel .import_screen_top {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+
+    padding: 22px;
+    border: 1px solid var(--import-border);
+    border-radius: 16px;
+    background: rgba(11, 18, 32, 0.48);
+}
+
+/* Label */
+
+#import_screen_panel #workout_string_lbl {
+    display: block;
+    margin: 0;
+
+    color: var(--import-text);
+    font-size: 0.94rem;
+    font-weight: 650;
+    letter-spacing: 0.005em;
+}
+
+/* Session input */
+
+#import_screen_panel #workout_string {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 140px;
+    margin: 0;
+    padding: 15px 16px;
+
+    resize: vertical;
+    border: 1px solid var(--import-border);
+    border-radius: 11px;
+    outline: none;
+
+    background: #0d1522;
+    color: var(--import-text);
+
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono",
+        monospace;
+    font-size: 0.875rem;
+    line-height: 1.7;
+
+    transition:
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        background 180ms ease;
+}
+
+#import_screen_panel #workout_string::placeholder {
+    color: var(--import-text-muted);
+    opacity: 0.85;
+}
+
+#import_screen_panel #workout_string:hover {
+    border-color: var(--import-border-hover);
+}
+
+#import_screen_panel #workout_string:focus {
+    border-color: rgba(110, 231, 183, 0.7);
+    background: #0e1725;
+    box-shadow: 0 0 0 3px rgba(110, 231, 183, 0.1);
+}
+
+/* Shared button styling */
+
+#import_screen_panel .my_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    min-height: 48px;
+    padding: 12px 18px;
+
+    border: 1px solid var(--import-border);
+    border-radius: 11px;
+
+    background: var(--import-panel-raised);
+    color: var(--import-text);
+
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 650;
+    line-height: 1.35;
+    text-align: center;
+
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+        background 180ms ease,
+        border-color 180ms ease,
+        color 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
+}
+
+#import_screen_panel .my_btn span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+#import_screen_panel .my_btn svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+}
+
+/* Primary: Import Session */
+
+#import_screen_panel #import_workout_btn {
+    width: 100%;
+    margin-top: 2px;
+
+    border-color: transparent;
+    background: var(--import-accent);
+    color: #092019;
+
+    box-shadow: 0 5px 16px rgba(110, 231, 183, 0.08);
+}
+
+#import_screen_panel #import_workout_btn:hover {
+    background: var(--import-accent-hover);
+    box-shadow: 0 7px 22px rgba(110, 231, 183, 0.15);
+    transform: translateY(-1px);
+}
+
+#import_screen_panel #import_workout_btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Bottom action buttons */
+
+#import_screen_panel .import_screen_bottom {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+
+    margin-top: 18px;
+}
+
+#import_screen_panel #create_workout_btn,
+#import_screen_panel #load_workout_btn {
+    min-width: 0;
+    min-height: 54px;
+    padding: 12px;
+    overflow-wrap: anywhere;
+}
+
+#import_screen_panel #create_workout_btn {
+    border-color: rgba(110, 231, 183, 0.2);
+    background: rgba(110, 231, 183, 0.07);
+    color: var(--import-accent);
+}
+
+#import_screen_panel #create_workout_btn:hover {
+    border-color: rgba(110, 231, 183, 0.42);
+    background: rgba(110, 231, 183, 0.12);
+    color: var(--import-accent-hover);
+    transform: translateY(-1px);
+}
+
+#import_screen_panel #load_workout_btn {
+    background: var(--import-panel-raised);
+    color: var(--import-text-secondary);
+}
+
+#import_screen_panel #load_workout_btn:hover {
+    border-color: var(--import-border-hover);
+    background: var(--import-panel-hover);
+    color: var(--import-text);
+    transform: translateY(-1px);
+}
+
+/* Keyboard accessibility */
+
+#import_screen_panel .my_btn:focus-visible {
+    outline: 2px solid var(--import-accent);
+    outline-offset: 4px;
+}
+
+#import_screen_panel #workout_string:focus-visible {
+    outline: none;
+}
+
+/* Tablet */
+
+@media (max-width: 800px) {
+    #import_screen_wrapper {
+        padding: 30px 18px 40px;
+    }
+
+    #import_screen_panel {
+        padding: 28px;
+    }
+}
+
+/* Mobile */
+
+@media (max-width: 520px) {
+    #import_screen_wrapper {
+        padding: 20px 12px 32px;
+    }
+
+    #import_screen_panel {
+        padding: 22px 18px;
+        border-radius: 17px;
+    }
+
+    #import_screen_panel h1 {
+        margin-bottom: 24px;
+        padding-bottom: 15px;
+    }
+
+    #import_screen_panel .import_screen_top {
+        gap: 12px;
+        padding: 16px;
+        border-radius: 13px;
+    }
+
+    #import_screen_panel #workout_string {
+        min-height: 125px;
+        padding: 13px;
+        font-size: 0.82rem;
+    }
+
+    #import_screen_panel .import_screen_bottom {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-top: 14px;
+    }
+
+    #import_screen_panel #create_workout_btn,
+    #import_screen_panel #load_workout_btn {
+        min-height: 48px;
+    }
+}
+
+/* Very narrow screens */
+
+@media (max-width: 360px) {
+    #import_screen_wrapper {
+        padding-right: 8px;
+        padding-left: 8px;
+    }
+
+    #import_screen_panel {
+        padding: 18px 13px;
+    }
+
+    #import_screen_panel .import_screen_top {
+        padding: 13px;
+    }
+
+    #import_screen_panel .my_btn {
+        gap: 8px;
+        padding: 11px;
+        font-size: 0.84rem;
+    }
+}
+
+/* Respect reduced-motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+    #import_screen_panel *,
+    #import_screen_panel *::before,
+    #import_screen_panel *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+</style>
+</head>
+<body>
+<div id="import_screen_wrapper">
+	<div id="import_screen_panel">
+        <h1>Session</h1>
+
+        <div class="import_screen_top">
+          <label for="workout_string" id="workout_string_lbl">Import session</label>
+          <textarea id="workout_string" rows="5" placeholder="Paste your time-based session string here..."></textarea>
+          <div class="my_btn pointer" id="import_workout_btn" onclick="MovesSelectionScreen(document.getElementById('workout_string').value.trim())"><span><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
+  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"></path>
+  <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"></path>
+</svg></span><span>Import Session</span></div>
+        </div>
+
+        <div class="import_screen_bottom">
+			    <div class="my_btn pointer" id="create_workout_btn" onclick="MovesSelectionScreen()"><span><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"></path>
+</svg></span><span>Create Session</span></div>
+			    <div class="my_btn pointer" id="load_workout_btn" onclick="newSessionStatePopup('load')"><span><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-bullseye" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"></path>
+  <path d="M8 13A5 5 0 1 1 8 3a5 5 0 0 1 0 10m0 1A6 6 0 1 0 8 2a6 6 0 0 0 0 12"></path>
+  <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8"></path>
+  <path d="M9.5 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"></path>
+</svg></span><span>Load Session</span></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
