@@ -472,18 +472,6 @@ button:disabled {
            2. PAGE LAYOUT
         ========================================================= */
 
-#root {
-  width: 100%;
-  max-width: var(--content-width);
-  min-height: 90vh;
-  margin: 0 auto;
-  padding: 32px 24px 48px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 24px;
-}
-
 #root > * {
   min-width: 0;
 }
@@ -930,17 +918,8 @@ button:disabled {
 }
 
 /* =========================================================
-           6. FOOTER & DEMO NOTICES
+           6. DEMO NOTICES
         ========================================================= */
-
-.app-footer {
-  margin-top: auto;
-  padding: 18px 24px;
-  border-top: 1px solid var(--border);
-  color: var(--text-muted);
-  font-size: 12px;
-  text-align: center;
-}
 
 .demo-notice {
   margin: 0;

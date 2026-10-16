@@ -1,108 +1,122 @@
-# BreakingCardio
+# UnchainedFitness
 
-A browser-based HIIT (High-Intensity Interval Training) workout builder and timer designed specifically for **breaking** (breakdance). Build a custom training session from a curated library of breaking moves, configure interval timings, and run through a timed workout — all without any backend or account required.
+A browser-based training toolkit built around **breaking** (breakdance) conditioning and general strength work. It started as a single HIIT workout builder and has grown into a small multi-section website. Each section has its own purpose and works entirely in the browser, with no backend, no account and no build step.
 
-## What it does
+## Sections
 
-BreakingCardio lets you assemble a breaking workout by picking moves, set how long each active interval and rest period lasts, then start a guided timer that walks you through the session one move at a time. Sessions can be saved to your browser's local storage and shared as portable encoded strings.
+The home page (`index.html`) is a portal with one card per section:
 
-## Screens & Functionality
+| Section                                    | Folder        | Focus        | What it is for                                                         |
+| ------------------------------------------ | ------------- | ------------ | ---------------------------------------------------------------------- |
+| [Practice](#practice)                      | `programme/`  | Conditioning | Build a checklist-style workout and tick off each move at your own pace |
+| [Time-based Session](#time-based-session)  | `session/`    | Stamina      | Build and run a timed HIIT workout with a guided interval timer        |
+| [Strength Training](#strength-training)    | `weights/`    | Strength     | Plan and track a weightlifting programme from your 1RM numbers         |
+| [Notes](#notes)                            | `notes/`      | Info         | Reference library of training methods, formats and equipment           |
 
-### Import Workout (Home)
+All sections share the navbar, footer, design tokens and component templates (`global.css`, `components.js`, `paths.js`), so the look and navigation are consistent.
 
-The landing screen. From here you can:
+### Practice
 
-- **Create a new workout** from scratch
-- **Import a workout string** — paste a Base64-encoded session string shared by someone else to load it directly
-- **Load a saved session** from one of your browser's saved slots
+Self-paced, checklist-style training.
 
-### Moves Selection (Workout Builder)
+- Create a new practice, import a shared practice string, or load a saved one
+- Add moves from a categorised dropdown, set a repetition count with + / −, and reorder with drag-and-drop
+- Mark each exercise complete as you go, with no fixed timer
+- Save up to **5 practices** in the browser (`breakingprog_1rm_v0`–`v4`)
+- Share a practice as a Base64 string
 
-The core workout editor. Features include:
+### Time-based Session
 
-- **Add moves** — select breaking moves from a categorised dropdown (Toprock, Footwork, Freeze)
-- **Set repetition count** — use + / − buttons to control how many times each move is performed in the set
-- **Drag-and-drop reordering** — reorder move cards via a drag handle (powered by SortableJS)
-- **Remove moves** — delete individual moves from the list
-- **Workout Settings panel** — configure:
-  - **Active time** (seconds per exercise interval, 10–120 s)
-  - **Rest time** (seconds between exercises, 10–120 s)
-  - **Total exercises count** (live-calculated)
-  - **Total workout duration** (live-calculated)
-- **Save session** — store the current workout to one of 5 named local storage slots
-- **Play** — launch the timed workout session
+The original HIIT workout builder and timer.
 
-### Play (HIIT Timer)
+- **Import screen** — create a new workout, paste a shared Base64 workout string, or load a saved session
+- **Builder** — add moves, set repetitions, and reorder with drag-and-drop
+- **Settings** — active time and rest time per interval (10–120 s), with live totals for exercise count and workout duration
+- **Player** — a countdown timer alternating **active** and **rest** phases, with:
+  - a breakbeat track during active intervals, fading out on rest
+  - the **Screen Wake Lock API** to keep the screen on
+  - pause / resume and a volume slider
+- Save up to **5 sessions** in the browser (`breakinghiit_1rm_v0`–`v4`)
 
-A full-screen interval timer that guides you through the workout:
+### Strength Training
 
-- Displays the current move name and a countdown timer
-- Alternates between **active** and **rest** phases automatically
-- Plays a **breakbeat audio track** during active intervals, with a fade-out on rest
-- Uses the **Screen Wake Lock API** to keep the screen on while training
-- **Pause / Resume** control
-- **Volume slider** to adjust the breakbeat level
+A weightlifting planner in the 5/3/1 style (storage key `hardgainers531_1rm_v1`).
 
-### Moves Overview
+- Enter your 1RM for squat, bench press, deadlift and overhead press
+- Choose the week (1–3) and training day (A, B, D, E)
+- Pick assistance work per day (push, pull, accessory, conditioning)
+- The programme for the selected week is calculated from your inputs
+- Reset to defaults, clear the stored data, or extract and load your state as a string
 
-A reference catalogue of all available breaking moves, grouped by category:
+### Notes
 
-| Category     | Moves                                                           |
-| ------------ | --------------------------------------------------------------- |
-| **Toprock**  | Indian Step, Cross Step, Side Step, Outlaw Step, Kick Step      |
-| **Footwork** | 6-Step, 3-Step, C-Walk / CCs, Zulu Spin, Baby Love              |
-| **Freeze**   | Baby Freeze, Chair Freeze, Air Chair, Hollowback, Invert Freeze |
+A static reference library of training methods (for example myoreps and other techniques), competition formats, equipment and practical training notes. Each entry covers how to do it, upsides and downsides.
 
-Each entry includes a short description of the movement.
+## Shared features
 
-### Saved Sessions
+### Moves and Exercises Overview
 
-Lists all workout sessions currently stored in the browser. From this screen you can:
+Available from the Practice and Time-based Session menus. It is a catalogue of the moves and exercises in `data.js`, shown as expandable cards with a description and a media placeholder. Moves are grouped by category: **Toprock**, **Footwork**, **Freeze**, **PowerMove**, **Conditioning** and **Stretching**.
 
-- View each saved session's name and storage key
-- Load a session back into the editor
-- Delete a saved session
+### Saved Sessions / Practices
 
-## Session Save & Share
+Lists the items saved in the browser for the current section. For each one you can:
 
-- Up to **5 sessions** can be saved locally in the browser (`localStorage`)
-- Sessions are stored as **Base64-encoded JSON** strings
-- Any session can be copied as a portable **workout string** and shared — another user can paste it into the Import screen to load the exact same workout
-- Session names must be between 5 and 15 characters
+- View its name, JSON and Base64 string
+- Click the Base64 string to copy it
+- Delete it
 
-## Tech Stack
+### Save & share
+
+- Sessions and practices are stored in `localStorage` as **Base64-encoded JSON**
+- A copied string can be pasted into the Import screen to load the exact same workout
+- Names must be between 5 and 15 characters
+
+## Tech stack
 
 | Concern       | Technology                                                  |
 | ------------- | ----------------------------------------------------------- |
 | Language      | Vanilla JavaScript + jQuery                                 |
-| Styling       | Bootstrap 4 (CSS) / Bootstrap 5 (JS), custom CSS            |
+| Styling       | Bootstrap 4 (CSS) / Bootstrap 5 (JS), custom CSS per section |
 | Drag & drop   | SortableJS                                                  |
-| Audio         | HTML5 `<audio>` + Web Audio API                             |
+| Audio         | HTML5 `<audio>`                                             |
 | Screen        | Screen Wake Lock API                                        |
 | Storage       | Browser `localStorage`                                      |
-| Fonts         | Google Fonts (Roboto, Montserrat, Rubik, Fira Code, others) |
-| No build step | Plain `.html` / `.js` / `.css` — open directly in a browser |
+| Fonts         | Google Fonts (Inter, Fira Code, Roboto, Montserrat, others) |
+| No build step | Plain `.html` / `.js` / `.css`                              |
 
 ## Running locally
 
-No build step or server is needed. Simply open `index.html` in a browser:
+No build step is needed. Serve the folder with any static server:
 
 ```bash
-# example using a basic static server
 npx serve .
 ```
 
-Or just double-click `index.html` — most features work from a `file://` URL, though the Wake Lock API requires a secure context (HTTPS or localhost) and audio autoplay policies may apply.
+You can also open `index.html` directly, but the Wake Lock API requires a secure context (HTTPS or localhost) and audio autoplay policies may apply. Navigation relies on relative paths, so keep the folder structure intact.
 
-## File Structure
+## File structure
 
 ```
-index.html          # App shell and script/style imports
-index.js            # All screen logic and app state
-components.js       # HTML component templates and SVG icons
-data.js             # Move library, storage keys, validation thresholds
-styles.css          # Custom styles
-workout_sample.json # Example workout JSON payload
-audio/              # Breakbeat audio track
-images/             # Favicon and brand assets
+index.html            # Home portal linking to the four sections
+index.js              # Shared screen logic for Session and Practice
+components.js         # Shared HTML templates, navbar, footer and icons
+data.js               # Move/exercise library, storage keys, validation thresholds
+paths.js              # Shared path helpers
+global.css            # Shared tokens, navbar, footer, overview and saved screens
+home.css              # Home portal styles
+workout_sample.json   # Example workout JSON payload
+CNAME                 # Custom domain for hosting
+
+programme/            # Practice section (index.html, programme.css)
+session/              # Time-based Session section (index.html, session.css)
+weights/              # Strength Training section (index.html, weights.js, weights.css, data.js)
+notes/                # Notes section (index.html, notes.js, notes.css, data.js)
+mockups/              # Static design mockups for the screens
+audio/                # Breakbeat audio track
+images/               # Favicon, portal tiles and brand assets
 ```
+
+## License
+
+See [LICENSE.txt](LICENSE.txt).

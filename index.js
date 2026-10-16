@@ -1106,7 +1106,9 @@ function SavedSessionsScreen(mode) {
   let validSessions = savedSessions.filter(Boolean);
 
   if (validSessions.length > 0) {
-    $("#root").append(savedSessions.join(""));
+    $("#root").append(
+      `<div id="saved_session_wrapper">${savedSessions.join("")}</div>`,
+    );
   } else {
     $("#root").append(
       `<div class="nosavedsession_window">NO SAVED SESSION FOUND!</div>`,
