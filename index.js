@@ -634,9 +634,11 @@ function MovesSelectionScreen(sessionBase64String) {
     $("#root").empty();
 
     // Appends to root the main sections of the screen
-    $("#root").append(`<div id="workout_settings"></div>
-      <div id="moves_selection"></div>
-      <div id="form_buttons"></div>`);
+    $("#root").append(`<div id="session_builder_wrapper">
+        <div id="workout_settings"></div>
+        <div id="moves_selection"></div>
+        <div id="form_buttons"></div>
+      </div>`);
 
     // Appends the workout config header to the first section and form buttons above the footer
     $("#workout_settings").append(WORKOUT_CONFIG);
@@ -843,6 +845,17 @@ function setVolume(value) {
   breakbeatAudio.volume = Number(value);
 }
 
+// Update time-based session progress bar
+function updateSessionProgress(elapsedSeconds, totalSeconds) {
+  const percent =
+    totalSeconds > 0
+      ? Math.min(100, Math.max(0, (elapsedSeconds / totalSeconds) * 100))
+      : 0;
+
+  $("#session-progress-bar").css("width", percent + "%");
+  $("#session-progress-track").attr("aria-valuenow", Math.round(percent));
+}
+
 // Update playcard countdown
 countdownInterval = null;
 let workoutPaused = false;
@@ -853,12 +866,13 @@ async function newCountDownSeconds(
   cardTitle,
   cardSubtitle,
   cardImg,
+  totalSeconds,
 ) {
   let sessionPlayCard = $("#workout_play_card");
   let countDownElement = $("#timeBasedExercisesSeconds");
   let setTitleElement = $("#workout_playcard_title");
   let setSubtitleElement = $("#workout_playcard_subtitle");
-  let setCardImgElement = $("#workout_playcard_img");
+  let setCardImgElement = $("#workout_playcard_img_wrapper");
 
   if (countdownInterval) {
     clearInterval(countdownInterval);
@@ -878,6 +892,7 @@ async function newCountDownSeconds(
 
       sessionElapsed++;
       $("#session-time-elapsed").text(formatTime(sessionElapsed));
+      updateSessionProgress(sessionElapsed, totalSeconds);
 
       seconds--;
       sessionPlayCard
@@ -971,6 +986,7 @@ async function startWorkoutSession(session) {
       cardTitle,
       cardSubtitle,
       cardImg,
+      session.totalDurationInSecs,
     );
   }
 

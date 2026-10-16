@@ -1,0 +1,1725 @@
+/* ========================================
+   Session Import Screen
+   Scoped to avoid affecting other screens
+======================================== */
+
+#import_screen_wrapper {
+  --import-bg: #0b1220;
+  --import-panel: rgba(18, 25, 37, 0.94);
+  --import-panel-raised: #192231;
+  --import-panel-hover: #202b3b;
+  --import-border: rgba(148, 163, 184, 0.14);
+  --import-border-hover: rgba(148, 163, 184, 0.28);
+  --import-text: #e5eaf1;
+  --import-text-secondary: #a0acbc;
+  --import-text-muted: #778498;
+  --import-accent: #6ee7b7;
+  --import-accent-hover: #8af0c8;
+
+  width: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+  padding: 40px 20px 48px;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  color: var(--import-text);
+  font-family: var(--main-font-family, inherit);
+  margin: auto;
+}
+
+#import_screen_wrapper *,
+#import_screen_wrapper *::before,
+#import_screen_wrapper *::after {
+  box-sizing: border-box;
+}
+
+/* Main panel */
+
+#import_screen_panel {
+  width: 100%;
+  max-width: 580px;
+  min-width: 0;
+  padding: 32px;
+
+  background: var(--import-panel);
+  border: 1px solid var(--import-border);
+  border-radius: 22px;
+
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* Heading */
+
+#import_screen_panel h1 {
+  position: relative;
+  margin: 0 0 30px;
+  padding-bottom: 18px;
+
+  color: var(--import-text);
+  font-size: clamp(1.65rem, 4vw, 2rem);
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -0.045em;
+  border-bottom: 1px solid var(--import-border);
+}
+
+#import_screen_panel h1::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+
+  width: 46px;
+  height: 3px;
+  border-radius: 999px;
+
+  background: var(--import-accent);
+  box-shadow: 0 0 14px rgba(110, 231, 183, 0.2);
+}
+
+/* Import section */
+
+#import_screen_panel .import_screen_top {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+
+  padding: 22px;
+  border: 1px solid var(--import-border);
+  border-radius: 16px;
+  background: rgba(11, 18, 32, 0.48);
+}
+
+/* Label */
+
+#import_screen_panel #workout_string_lbl {
+  display: block;
+  margin: 0;
+
+  color: var(--import-text);
+  font-size: 0.94rem;
+  font-weight: 650;
+  letter-spacing: 0.005em;
+}
+
+/* Session input */
+
+#import_screen_panel #workout_string {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 140px;
+  margin: 0;
+  padding: 15px 16px;
+
+  resize: vertical;
+  border: 1px solid var(--import-border);
+  border-radius: 11px;
+  outline: none;
+
+  background: #0d1522;
+  color: var(--import-text);
+
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+#import_screen_panel #workout_string::placeholder {
+  color: var(--import-text-muted);
+  opacity: 0.85;
+}
+
+#import_screen_panel #workout_string:hover {
+  border-color: var(--import-border-hover);
+}
+
+#import_screen_panel #workout_string:focus {
+  border-color: rgba(110, 231, 183, 0.7);
+  background: #0e1725;
+  box-shadow: 0 0 0 3px rgba(110, 231, 183, 0.1);
+}
+
+/* Shared button styling */
+
+#import_screen_panel .my_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  min-height: 48px;
+  padding: 12px 18px;
+
+  border: 1px solid var(--import-border);
+  border-radius: 11px;
+
+  background: var(--import-panel-raised);
+  color: var(--import-text);
+
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 650;
+  line-height: 1.35;
+  text-align: center;
+
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+#import_screen_panel .my_btn span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+#import_screen_panel .my_btn svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+/* Primary: Import Session */
+
+#import_screen_panel #import_workout_btn {
+  width: 100%;
+  margin-top: 2px;
+
+  border-color: transparent;
+  background: var(--import-accent);
+  color: #092019;
+
+  box-shadow: 0 5px 16px rgba(110, 231, 183, 0.08);
+}
+
+#import_screen_panel #import_workout_btn:hover {
+  background: var(--import-accent-hover);
+  box-shadow: 0 7px 22px rgba(110, 231, 183, 0.15);
+  transform: translateY(-1px);
+}
+
+#import_screen_panel #import_workout_btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Bottom action buttons */
+
+#import_screen_panel .import_screen_bottom {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+
+  margin-top: 18px;
+}
+
+#import_screen_panel #create_workout_btn,
+#import_screen_panel #load_workout_btn {
+  min-width: 0;
+  min-height: 54px;
+  padding: 12px;
+  overflow-wrap: anywhere;
+}
+
+#import_screen_panel #create_workout_btn {
+  border-color: rgba(110, 231, 183, 0.2);
+  background: rgba(110, 231, 183, 0.07);
+  color: var(--import-accent);
+}
+
+#import_screen_panel #create_workout_btn:hover {
+  border-color: rgba(110, 231, 183, 0.42);
+  background: rgba(110, 231, 183, 0.12);
+  color: var(--import-accent-hover);
+  transform: translateY(-1px);
+}
+
+#import_screen_panel #load_workout_btn {
+  background: var(--import-panel-raised);
+  color: var(--import-text-secondary);
+}
+
+#import_screen_panel #load_workout_btn:hover {
+  border-color: var(--import-border-hover);
+  background: var(--import-panel-hover);
+  color: var(--import-text);
+  transform: translateY(-1px);
+}
+
+/* Keyboard accessibility */
+
+#import_screen_panel .my_btn:focus-visible {
+  outline: 2px solid var(--import-accent);
+  outline-offset: 4px;
+}
+
+#import_screen_panel #workout_string:focus-visible {
+  outline: none;
+}
+
+/* Tablet */
+
+@media (max-width: 800px) {
+  #import_screen_wrapper {
+    padding: 30px 18px 40px;
+  }
+
+  #import_screen_panel {
+    padding: 28px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 520px) {
+  #import_screen_wrapper {
+    padding: 20px 12px 32px;
+  }
+
+  #import_screen_panel {
+    padding: 22px 18px;
+    border-radius: 17px;
+  }
+
+  #import_screen_panel h1 {
+    margin-bottom: 24px;
+    padding-bottom: 15px;
+  }
+
+  #import_screen_panel .import_screen_top {
+    gap: 12px;
+    padding: 16px;
+    border-radius: 13px;
+  }
+
+  #import_screen_panel #workout_string {
+    min-height: 125px;
+    padding: 13px;
+    font-size: 0.82rem;
+  }
+
+  #import_screen_panel .import_screen_bottom {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  #import_screen_panel #create_workout_btn,
+  #import_screen_panel #load_workout_btn {
+    min-height: 48px;
+  }
+}
+
+/* Very narrow screens */
+
+@media (max-width: 360px) {
+  #import_screen_wrapper {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+  #import_screen_panel {
+    padding: 18px 13px;
+  }
+
+  #import_screen_panel .import_screen_top {
+    padding: 13px;
+  }
+
+  #import_screen_panel .my_btn {
+    gap: 8px;
+    padding: 11px;
+    font-size: 0.84rem;
+  }
+}
+
+/* Respect reduced-motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+  #import_screen_panel *,
+  #import_screen_panel *::before,
+  #import_screen_panel *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/*===================================================================================================*/
+/*===================================================================================================*/
+/*================SPLIT==============================================================================*/
+/*===================================================================================================*/
+/*===================================================================================================*/
+
+/* =========================================================
+           SESSION BUILDER SCREEN
+        ========================================================= */
+
+/* =========================================================
+           1. DESIGN TOKENS & RESET
+        ========================================================= */
+
+:root {
+  --app-bg: #0b1220;
+  --panel: rgba(18, 25, 37, 0.94);
+  --panel-raised: #192231;
+  --panel-hover: #202b3b;
+
+  --border: rgba(148, 163, 184, 0.14);
+  --border-hover: rgba(148, 163, 184, 0.28);
+
+  --text: #e5eaf1;
+  --text-secondary: #a0acbc;
+  --text-muted: #778498;
+
+  --accent: #6ee7b7;
+  --accent-hover: #8af0c8;
+  --accent-dark: #153b31;
+
+  --danger: #f28b8b;
+  --danger-bg: rgba(242, 139, 139, 0.1);
+
+  --radius: 16px;
+  --radius-small: 10px;
+
+  --content-width: 1100px;
+
+  --main-font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --main-font-size: 14px;
+  --main-font-color: var(--text);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+button:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.separator {
+  flex: 0 0 1px;
+  align-self: stretch;
+  background: var(--border);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================================================
+           2. PAGE LAYOUT
+        ========================================================= */
+
+#root {
+  width: 100%;
+  max-width: var(--content-width);
+  min-height: 90vh;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 24px;
+}
+
+#root > * {
+  min-width: 0;
+}
+
+/* =========================================================
+           3. WORKOUT SETTINGS CARD
+        ========================================================= */
+
+#session_builder_wrapper {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+#workout_settings {
+  width: 100%;
+}
+
+#workout_config_card {
+  padding: 28px 30px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.12);
+}
+
+@media (max-width: 560px) {
+  #workout_config_title {
+    font-size: 1.65rem;
+  }
+}
+
+#workout_config_title {
+  position: relative;
+  margin: 0;
+  padding-bottom: 15px;
+  color: var(--pb-text);
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -0.045em;
+}
+
+#workout_config_title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 44px;
+  height: 3px;
+  border-radius: 99px;
+  background: #6ee7b7;
+  box-shadow: 0 0 14px rgba(110, 231, 183, 0.18);
+}
+
+#workout_config {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+#workout_config_info,
+#workout_config_activerest {
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+  min-width: 0;
+  padding: 22px;
+}
+
+#workout_config_info {
+  border-right: 1px solid var(--border);
+}
+
+.workout_config_pill {
+  min-width: 0;
+}
+
+#workout_config_info .workout_config_pill {
+  flex: 1;
+  gap: 12px;
+}
+
+.config_label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
+
+.config_label svg {
+  display: block;
+  width: 21px;
+  height: 21px;
+  stroke: currentColor;
+}
+
+#total_count,
+#total_duration,
+#seconds_active,
+#seconds_rest {
+  color: var(--text);
+  font-size: 20px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.6px;
+}
+
+.config_value_pill {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  min-width: 0;
+}
+
+#total_duration_hidden {
+  display: none;
+}
+
+#workout_config_activerest {
+  gap: 16px;
+}
+
+#workout_config_activerest > .workout_config_pill {
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.config_active {
+  justify-content: center;
+  gap: 8px;
+}
+
+.plusminus_btns {
+  gap: 8px;
+}
+
+.plusminus_btns .separator {
+  height: 16px;
+}
+
+.plusbtn,
+.minusbtn {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--panel-raised);
+  color: var(--text-secondary);
+  font-size: 18px;
+  line-height: 1;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.plusbtn:hover,
+.minusbtn:hover {
+  border-color: var(--border-hover);
+  background: var(--panel-hover);
+  color: var(--accent);
+}
+
+/* =========================================================
+           4. EXERCISE LIST
+        ========================================================= */
+
+#moves_selection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.move_label {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 13px 14px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--panel);
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.move_label:hover {
+  border-color: var(--border-hover);
+  background: rgba(25, 34, 49, 0.98);
+}
+
+.move_label > .flex {
+  grid-column: 1;
+  grid-row: 1;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.drag-handle {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 22px;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.drag-handle:hover {
+  background: var(--panel-hover);
+  color: var(--text);
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.remove_move_label {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  transition:
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.remove_move_label svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+
+.remove_move_label:hover {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.move_left {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+}
+
+.moves-dropdown {
+  width: 100%;
+  min-width: 0;
+}
+
+.move_dropdown {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 38px 10px 13px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background-color: #141d2b;
+  color: var(--text);
+  cursor: pointer;
+  outline-offset: 2px;
+}
+
+.move_dropdown:hover {
+  border-color: var(--border-hover);
+}
+
+.move_dropdown:focus {
+  border-color: rgba(110, 231, 183, 0.65);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(110, 231, 183, 0.09);
+}
+
+.move_dropdown option,
+.move_dropdown optgroup {
+  background: #141d2b;
+  color: var(--text);
+}
+
+.move_dropdown option:disabled {
+  color: var(--text-muted);
+}
+
+.move_right {
+  grid-column: 3;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.increase_move_count_btn,
+.decrease_move_count_btn {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel-raised);
+  color: var(--text-secondary);
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.increase_move_count_btn svg,
+.decrease_move_count_btn svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+
+.increase_move_count_btn:hover,
+.decrease_move_count_btn:hover {
+  border-color: rgba(110, 231, 183, 0.35);
+  background: var(--accent-dark);
+  color: var(--accent);
+}
+
+.move_count {
+  min-width: 18px;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 750;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.sortable-ghost {
+  opacity: 0.35;
+  border: 1px dashed var(--accent);
+}
+
+.sortable-chosen {
+  border-color: rgba(110, 231, 183, 0.45);
+}
+
+/* =========================================================
+           5. FORM ACTION BUTTONS
+        ========================================================= */
+
+#form_buttons {
+  width: 100%;
+}
+
+#form_buttons > .flex-column {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.my_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 12px 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 750;
+  letter-spacing: 0.1px;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.my_btn svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
+.my_btn:active {
+  transform: translateY(1px);
+}
+
+.add_btn {
+  width: 50px;
+  padding: 0;
+  background: var(--panel);
+  color: var(--text-secondary);
+}
+
+.add_btn:hover {
+  border-color: var(--border-hover);
+  background: var(--panel-hover);
+  color: var(--accent);
+}
+
+.play_btn {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #10251e;
+  box-shadow: 0 4px 16px rgba(110, 231, 183, 0.08);
+}
+
+.play_btn:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  box-shadow: 0 5px 20px rgba(110, 231, 183, 0.15);
+}
+
+.save_btn {
+  background: var(--panel);
+  color: var(--text);
+}
+
+.save_btn:hover {
+  border-color: var(--border-hover);
+  background: var(--panel-hover);
+}
+
+/* =========================================================
+           6. FOOTER & DEMO NOTICES
+        ========================================================= */
+
+.app-footer {
+  margin-top: auto;
+  padding: 18px 24px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.demo-notice {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+/* =========================================================
+           7. RESPONSIVE LAYOUT
+        ========================================================= */
+
+@media (max-width: 800px) {
+  #root {
+    padding: 26px 18px 36px;
+    gap: 20px;
+  }
+
+  #workout_config {
+    grid-template-columns: 1fr;
+  }
+
+  #workout_config_info {
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  #workout_config_info,
+  #workout_config_activerest {
+    padding: 18px;
+  }
+
+  #workout_config_info {
+    gap: 24px;
+  }
+
+  #workout_config_activerest {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 520px) {
+  .navbar {
+    min-height: 60px;
+    padding: 0 16px;
+  }
+
+  .navbar-label {
+    font-size: 11px;
+  }
+
+  #root {
+    padding: 20px 12px 28px;
+    gap: 16px;
+  }
+
+  #workout_config_title {
+    padding: 15px 16px;
+  }
+
+  #workout_config_info {
+    gap: 14px;
+    padding: 16px 12px;
+  }
+
+  #workout_config_info .workout_config_pill {
+    gap: 8px;
+  }
+
+  #workout_config_activerest {
+    gap: 10px;
+    padding: 16px 10px;
+  }
+
+  #workout_config_activerest > .separator {
+    margin: 0 1px;
+  }
+
+  .config_label svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  #total_count,
+  #total_duration,
+  #seconds_active,
+  #seconds_rest {
+    font-size: 18px;
+  }
+
+  .config_active {
+    gap: 5px;
+  }
+
+  .plusminus_btns {
+    gap: 5px;
+  }
+
+  .plusbtn,
+  .minusbtn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .move_label {
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .move_label > .flex {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    gap: 8px;
+  }
+
+  .drag-handle,
+  .remove_move_label {
+    width: 28px;
+    height: 28px;
+  }
+
+  .move_left {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .move_dropdown {
+    min-height: 42px;
+    padding: 9px 30px 9px 10px;
+    font-size: 13px;
+  }
+
+  .move_right {
+    grid-column: 2;
+    grid-row: 2;
+    justify-content: flex-start;
+    gap: 10px;
+    padding-top: 2px;
+  }
+
+  .increase_move_count_btn,
+  .decrease_move_count_btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  #form_buttons > .flex-column {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .add_btn {
+    width: 48px;
+    min-height: 46px;
+  }
+
+  .play_btn,
+  .save_btn {
+    min-height: 46px;
+    padding: 10px 12px;
+  }
+
+  .play_btn {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .save_btn {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .add_btn {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    height: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/*===================================================================================================*/
+/*===================================================================================================*/
+/*================SPLIT==============================================================================*/
+/*===================================================================================================*/
+/*===================================================================================================*/
+
+/* =========================================================
+           SESSION PLAYER SCREEN
+        ========================================================= */
+
+/* =========================================================
+   1. PLAYER DESIGN TOKENS
+========================================================= */
+
+:root {
+  --player-bg: rgba(18, 25, 37, 0.94);
+  --player-raised: #192231;
+  --player-border: rgba(148, 163, 184, 0.14);
+
+  --player-text: #e5eaf1;
+  --player-secondary: #a0acbc;
+  --player-muted: #778498;
+
+  --player-accent: #6ee7b7;
+  --player-accent-hover: #8af0c8;
+
+  --player-radius: 18px;
+  --player-content-width: 760px;
+}
+
+/* =========================================================
+   2. PAGE LAYOUT
+========================================================= */
+
+.workout-player {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  width: 100%;
+  max-width: var(--player-content-width);
+  min-width: 0;
+  margin: 0 auto;
+  margin-top: 2rem;
+}
+
+.workout-player *,
+.workout-player *::before,
+.workout-player *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   3. PLAYER CARD
+========================================================= */
+
+#workout_play_card {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+
+  width: 100%;
+  min-width: 0;
+  padding: 24px;
+
+  border: 1px solid var(--player-border);
+  border-radius: var(--player-radius);
+
+  background: var(--player-bg);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================================================
+   4. EXERCISE TITLE & ROUND
+========================================================= */
+
+#workout_playcard_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  min-width: 0;
+}
+
+.workout-exercise-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+#workout_playcard_title {
+  overflow-wrap: anywhere;
+
+  color: var(--player-text);
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 780;
+  line-height: 1.2;
+  letter-spacing: -0.8px;
+}
+
+#workout_playcard_subtitle {
+  color: var(--player-muted);
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+/* Small status indicator */
+
+.workout-live-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+
+  padding: 8px 11px;
+
+  border: 1px solid rgba(110, 231, 183, 0.18);
+  border-radius: 999px;
+
+  background: rgba(110, 231, 183, 0.07);
+  color: var(--player-accent);
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.9px;
+}
+
+.live-indicator-dot,
+.media-caption-dot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+
+  border-radius: 50%;
+  background: var(--player-accent);
+}
+
+/* =========================================================
+   5. TIMER & PAUSE BUTTON
+========================================================= */
+
+#workout_playcard_content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  min-width: 0;
+  padding: 22px 0;
+
+  border-top: 1px solid var(--player-border);
+  border-bottom: 1px solid var(--player-border);
+}
+
+.workout-timer {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  min-width: 0;
+}
+
+#timeBasedExercisesSeconds {
+  color: var(--player-accent);
+
+  font-size: clamp(48px, 8vw, 68px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -3px;
+
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.timer-unit {
+  color: var(--player-muted);
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 1.2px;
+}
+
+#pause_btn {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  width: 54px;
+  height: 54px;
+  padding: 0;
+
+  border: 1px solid rgba(110, 231, 183, 0.22);
+  border-radius: 16px;
+
+  background: rgba(110, 231, 183, 0.09);
+  color: var(--player-accent);
+
+  cursor: pointer;
+
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+#pause_btn svg {
+  display: block;
+  width: 23px;
+  height: 23px;
+}
+
+#pause_btn:hover {
+  border-color: rgba(110, 231, 183, 0.45);
+  background: rgba(110, 231, 183, 0.16);
+}
+
+#pause_btn:active {
+  transform: scale(0.96);
+}
+
+#pause_btn:focus-visible,
+#volume_slider:focus-visible {
+  outline: 2px solid var(--player-accent);
+  outline-offset: 4px;
+}
+
+/* =========================================================
+   6. VOLUME CONTROL
+========================================================= */
+
+#volume_control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  width: 100%;
+  max-width: 300px;
+  min-width: 0;
+
+  color: var(--player-secondary);
+}
+
+#volume_control > svg {
+  display: block;
+  flex-shrink: 0;
+  width: 21px;
+  height: 21px;
+}
+
+#volume_slider {
+  width: 100%;
+  min-width: 0;
+  height: 5px;
+  margin: 0;
+
+  border-radius: 999px;
+  accent-color: var(--player-accent);
+
+  cursor: pointer;
+}
+
+.volume-value {
+  min-width: 36px;
+
+  color: var(--player-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* =========================================================
+   7. OVERALL SESSION PROGRESS
+========================================================= */
+
+#session-duration-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  width: 100%;
+  min-width: 0;
+}
+
+.session-progress-labels {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  color: var(--player-muted);
+  font-size: 12px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+#session-time-elapsed {
+  color: var(--player-text);
+}
+
+#session-total-duration {
+  color: var(--player-secondary);
+}
+
+.session-progress-separator {
+  color: #536074;
+}
+
+.session-progress-labels > svg {
+  width: 17px;
+  height: 17px;
+  margin-left: auto;
+  flex-shrink: 0;
+
+  color: var(--player-muted);
+}
+
+#session-progress-track {
+  overflow: hidden;
+
+  width: 100%;
+  height: 5px;
+
+  border-radius: 999px;
+  background: #293446;
+}
+
+#session-progress-bar {
+  width: 1%;
+  height: 100%;
+
+  border-radius: inherit;
+  background: var(--player-accent);
+
+  transition: width 250ms linear;
+}
+
+/* =========================================================
+   8. EXERCISE IMAGE / GIF
+========================================================= */
+
+#workout_playcard_img {
+  width: 100%;
+  min-width: 0;
+}
+
+.exercise-media-frame {
+  position: relative;
+  overflow: hidden;
+
+  width: 100%;
+  min-width: 0;
+
+  border: 1px solid var(--player-border);
+  border-radius: var(--player-radius);
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(110, 231, 183, 0.045),
+      transparent 65%
+    ),
+    #101827;
+
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+}
+
+/*
+   A consistent landscape media area.
+   Images retain their proportions and GIFs animate normally.
+*/
+
+#workout_exercise_image {
+  display: block;
+
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  height: auto;
+
+  object-fit: contain;
+  object-position: center;
+
+  padding: 12px;
+
+  color: var(--player-secondary);
+  font-size: 13px;
+}
+
+/* Image label */
+
+.exercise-media-caption {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  max-width: calc(100% - 28px);
+  padding: 8px 11px;
+
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  border-radius: 8px;
+
+  background: rgba(11, 18, 32, 0.86);
+  color: var(--player-secondary);
+
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 1px;
+
+  backdrop-filter: blur(8px);
+}
+
+.exercise-media-caption span:last-child {
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   9. ACCESSIBILITY
+========================================================= */
+
+.sr-only {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+
+  border: 0;
+}
+
+/* =========================================================
+   10. TABLET
+========================================================= */
+
+@media (max-width: 800px) {
+  #root {
+    padding: 26px 18px 36px;
+  }
+
+  .workout-player {
+    gap: 16px;
+  }
+
+  #workout_play_card {
+    padding: 22px;
+    gap: 20px;
+  }
+}
+
+/* =========================================================
+   11. MOBILE
+========================================================= */
+
+@media (max-width: 520px) {
+  #root {
+    min-height: auto;
+    padding: 18px 12px 28px;
+  }
+
+  .workout-player {
+    gap: 12px;
+  }
+
+  #workout_play_card {
+    gap: 18px;
+    padding: 17px;
+    border-radius: 15px;
+  }
+
+  #workout_playcard_header {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  #workout_playcard_title {
+    font-size: 23px;
+    letter-spacing: -0.5px;
+  }
+
+  #workout_playcard_subtitle {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  .workout-live-indicator {
+    gap: 6px;
+    padding: 7px 9px;
+    font-size: 9px;
+  }
+
+  .live-indicator-dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  #workout_playcard_content {
+    padding: 20px 0;
+  }
+
+  #timeBasedExercisesSeconds {
+    font-size: clamp(48px, 13vw, 60px);
+    letter-spacing: -2px;
+  }
+
+  #pause_btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+  }
+
+  #volume_control {
+    max-width: none;
+  }
+
+  .session-progress-labels {
+    font-size: 11px;
+  }
+
+  .exercise-media-frame {
+    border-radius: 14px;
+  }
+
+  #workout_exercise_image {
+    aspect-ratio: 4 / 3;
+    padding: 8px;
+  }
+
+  .exercise-media-caption {
+    left: 10px;
+    bottom: 10px;
+    padding: 7px 9px;
+    font-size: 8px;
+    letter-spacing: 0.7px;
+  }
+}
+
+/* =========================================================
+   12. SMALL MOBILE
+========================================================= */
+
+@media (max-width: 360px) {
+  #root {
+    padding: 14px 8px 22px;
+  }
+
+  #workout_play_card {
+    padding: 14px;
+  }
+
+  .workout-live-indicator {
+    padding: 6px 7px;
+    font-size: 8px;
+  }
+
+  #workout_playcard_title {
+    font-size: 21px;
+  }
+
+  #pause_btn {
+    width: 46px;
+    height: 46px;
+  }
+
+  .session-progress-labels {
+    gap: 6px;
+  }
+}
+
+/* =========================================================
+   13. REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

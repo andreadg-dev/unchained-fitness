@@ -118,6 +118,39 @@ const WARNING_TRIANGLE = `<svg xmlns="http://www.w3.org/2000/svg" width="16" hei
   <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
 </svg>`;
 
+const LIST_ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M9 6h11M9 12h11M9 18h11"></path>
+                                    <path d="M4 6h.01M4 12h.01M4 18h.01"></path>
+                                </svg>`;
+
+const STOPWATCH_ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="12" cy="13" r="8"></circle>
+                                    <path d="M12 9v4l2.5 1.5M9 2h6M12 2v3"></path>
+                                </svg>`;
+
+const PLUS_ICON_NEW = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                        <path d="M12 5v14M5 12h14"></path>
+                    </svg>`;
+
+const BIN_ICON_NEW = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path>
+                            <path d="M10 10v6M14 10v6"></path>
+                        </svg>`;
+
+const PLAY_ICON_NEW = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="m8 5 12 7-12 7z"></path>
+                    </svg>`;
+
+const PAUSE_ICON_NEW = `<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 24 24"
+     width="24"
+     height="24"
+     fill="currentColor"
+     aria-hidden="true">
+  <rect x="6" y="4.5" width="4.5" height="15" rx="1.4"/>
+  <rect x="13.5" y="4.5" width="4.5" height="15" rx="1.4"/>
+</svg>`;
+
 // OTHER GLOBAL COMPONENTS
 const NAVBAR_CONFIG = {
   session: {
@@ -462,21 +495,21 @@ const MOVE_LABEL = (movesdropdown, exerciseCount, load) => {
   return `<div class="move_label ${load ? "okselection" : "noselection"}">
     <div class="flex">
         <div class="drag-handle" title="Drag to reorder">⠿</div>
-        <div class="remove_move_label pointer" onClick="removeMoveLabel(this); updateWorkoutSettings(calculateTotalExerciseCount())">${BIN_ICON}</div>
+        <div class="remove_move_label pointer" onClick="removeMoveLabel(this); updateWorkoutSettings(calculateTotalExerciseCount())">${BIN_ICON_NEW}</div>
     </div>
     <div class="move_left">
         <div class="moves-dropdown">${movesdropdown}</div>
     </div>
     <div class="move_right">
-        <span class="increase_move_count_btn pointer" onClick="increaseMoveCount(this); updateWorkoutSettings(calculateTotalExerciseCount()); updateWorkoutSettings(null,calculateTotalWorkoutDuration())">${PLUS_CIRCLE_FILL}</span>
+        <span class="increase_move_count_btn pointer" onClick="increaseMoveCount(this); updateWorkoutSettings(calculateTotalExerciseCount()); updateWorkoutSettings(null,calculateTotalWorkoutDuration())">+</span>
         <span class="move_count">${exerciseCount || 1}</span>
-        <span class="decrease_move_count_btn pointer" onClick="decreaseMoveCount(this); updateWorkoutSettings(calculateTotalExerciseCount()); updateWorkoutSettings(null,calculateTotalWorkoutDuration())">${MINUS_CIRCLE_FILL}</span>
+        <span class="decrease_move_count_btn pointer" onClick="decreaseMoveCount(this); updateWorkoutSettings(calculateTotalExerciseCount()); updateWorkoutSettings(null,calculateTotalWorkoutDuration())">-</span>
     </div>
 </div>`;
 };
 
-const ADD_BUTTON = `<div class="add_btn my_btn pointer" onClick="addMoveLabel(this)">${PLUS_CIRCLE_FILL}</div>`;
-const PLAY_BUTTON = `<div class="play_btn my_btn pointer" onClick="PlayScreen()">${PLAY_ICON} PLAY</div>`;
+const ADD_BUTTON = `<div class="add_btn my_btn pointer" onClick="addMoveLabel(this)">${PLUS_ICON_NEW}</div>`;
+const PLAY_BUTTON = `<div class="play_btn my_btn pointer" onClick="PlayScreen()">${PLAY_ICON_NEW} PLAY</div>`;
 const SAVE_BUTTON = `<div class="save_btn my_btn pointer" onClick="newSessionStatePopup('save')">${FLOPPY_DISK} SAVE</div>`;
 
 const FORM_BUTTONS = `<div class="flex-column">${ADD_BUTTON}${PLAY_BUTTON}${SAVE_BUTTON}</div>`;
@@ -488,16 +521,16 @@ const PLUSMINUS_BTNS = `<div class="plusminus_btns flex">
 </div>`;
 
 const WORKOUT_CONFIG = `<div id="workout_config_card">
-    <div id="workout_config_title">Workout Settings</div>
+    <h2 id="workout_config_title">Session Builder</h2>
     <div id="workout_config">
         <div id="workout_config_info">
             <div id="total_exercise_count" class="workout_config_pill flex">
-                <div class="config_label" aria-label="Total exercises" title="Total exercises">${COUNTING_ICON}</div>
+                <div class="config_label" aria-label="Total exercises" title="Total exercises">${LIST_ICON}</div>
                 <div id="total_count">0</div>
             </div>
             ${SEPARATOR}
             <div id="total_session_duration" class="workout_config_pill flex">
-                <div class="config_label" aria-label="Total workout duration" title="Total workout duration">${CLOCK_ICON}</div>
+                <div class="config_label" aria-label="Total workout duration" title="Total workout duration">${STOPWATCH_ICON}</div>
                 <div class="config_value_pill">
                     <div id="total_duration">0 ' 0 "</div>
                     <div id="total_duration_hidden"></div>
@@ -507,7 +540,7 @@ const WORKOUT_CONFIG = `<div id="workout_config_card">
         <div id="workout_config_activerest">
             <div id="seconds_exercises" class="workout_config_pill flex-column">
                 <div class="config_active flex">
-                    <div class="config_label" aria-label="Exercise duration in sec" title="Exercise duration in sec">${PLAY_ICON}</div>
+                    <div class="config_label" aria-label="Exercise duration in sec" title="Exercise duration in sec">${PLAY_ICON_NEW}</div>
                     <div class="config_value_pill">
                         <div id="seconds_active">10</div>
                         <div>"</div>
@@ -518,7 +551,7 @@ const WORKOUT_CONFIG = `<div id="workout_config_card">
             ${SEPARATOR}
             <div id="seconds_rest_duration" class="workout_config_pill flex-column">
                 <div class="config_active flex">
-                    <div class="config_label" aria-label="Rest duration in sec" title="Rest duration in sec">${PAUSE_ICON}</div>
+                    <div class="config_label" aria-label="Rest duration in sec" title="Rest duration in sec">${PAUSE_ICON_NEW}</div>
                     <div class="config_value_pill">
                         <div id="seconds_rest">10</div>
                         <div>"</div>
@@ -534,41 +567,168 @@ const WORKOUT_CONFIG = `<div id="workout_config_card">
 // PLAY SCREEN
 //================================
 
-const WORKOUT_PLAYCARD = `<div>
-  <div id="workout_play_card" class="flex-column">
-    <div class="flex">
-      <div class="flex-column">
+const WORKOUT_PLAYCARD = `<main class="workout-player">
+  <!-- Workout timer and controls -->
+  <section id="workout_play_card" class="play_styling">
+    <div id="workout_playcard_header">
+
+      <div class="workout-exercise-info">
         <div id="workout_playcard_title">LOADING...</div>
         <div id="workout_playcard_subtitle"></div>
       </div>
-      <div class="separator"></div>
-      <div id="workout_playcard_content" class="flex">
-          <div id="timeBasedExercisesSeconds">0</div>
-          <div id="pause_btn" onclick="toggleWorkoutPause()">${PAUSE_ICON}</div>
+
+      <div class="workout-live-indicator">
+        <span class="live-indicator-dot"></span>
+        <span>WORKOUT</span>
       </div>
+
+    </div>  
+
+    <div id="workout_playcard_content" class="flex">
+
+      <div class="workout-timer" aria-live="off">
+        <span id="timeBasedExercisesSeconds">0</span>
+        <span class="timer-unit">SEC</span>
+      </div>
+
+      <button
+          type="button"
+          id="pause_btn"
+          class="player-control-btn"
+          onclick="toggleWorkoutPause()"
+          aria-label="Pause workout"
+          title="Pause or resume workout"
+          aria-pressed="false"
+      >
+          <!-- Default icon: pause -->
+          <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+          >
+              <rect x="6" y="4" width="4" height="16" rx="1"/>
+              <rect x="14" y="4" width="4" height="16" rx="1"/>
+          </svg>
+      </button>
+
     </div>
-    <div id="volume_control" class="flex">
-        ${VOLUME_ICON}
-        <input type="range" id="volume_slider" min="0" max="1" step="0.05" value="1"
-            oninput="setVolume(this.value)">
+    
+
+    <!-- Volume -->
+    <div id="volume_control">
+
+      <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+      >
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+          <path d="M15.5 8.5a5 5 0 0 1 0 7"/>
+          <path d="M19 5a10 10 0 0 1 0 14"/>
+      </svg>
+
+      <label for="volume_slider" class="sr-only">
+          Workout volume
+      </label>
+
+      <input
+          type="range"
+          id="volume_slider"
+          min="0"
+          max="1"
+          step="0.05"
+          value="1"
+          oninput="setVolume(this.value)"
+          aria-label="Workout volume"
+      />
+
+      <span id="volume_value" class="volume-value">100%</span>
+
     </div>
-    <div id="session-duration-progress" class="flex">
-      <div id="session-time-elapsed"></div>
-      <div>/</div>
-      <div id="session-total-duration"></div>
-      <div>${CLOCK_ICON}</div>
+
+    <!-- Overall session progress -->
+    <div id="session-duration-progress">
+
+      <div class="session-progress-labels">
+          <span id="session-time-elapsed"></span>
+
+          <span class="session-progress-separator">/</span>
+
+          <span id="session-total-duration"></span>
+
+          <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+          >
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+          </svg>
+      </div>
+
+      <div
+          id="session-progress-track"
+          role="progressbar"
+          aria-label="Workout session progress"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="1"
+      >
+          <div id="session-progress-bar"></div>
     </div>
-  </div>
-  <div id="workout_playcard_img"></div>
-</div>`;
+
+      </div>
+
+  </section>
+
+  <!-- Exercise demonstration: static image or animated GIF -->
+  <section id="workout_playcard_img" aria-label="Exercise demonstration">
+
+      <div class="exercise-media-frame">
+
+          <div id="workout_playcard_img_wrapper"></div>
+
+          <div class="exercise-media-caption">
+              <span class="media-caption-dot"></span>
+              <span>EXERCISE DEMONSTRATION</span>
+          </div>
+
+      </div>
+
+  </section>
+
+</main>`;
 
 const REST_IMG = `<img
         src="${movePlaceholderImg}"
-        alt="Image of a bboy resting" />`;
+        alt="Image of a bboy resting" 
+        id="workout_exercise_image"/>`;
 
 const MOVE_IMG_PLACEHOLDER = `<img
         src="${restPlaceholderImg}"
-        alt="Image of a bboy doing footworks" />`;
+        alt="Image of a bboy doing footworks" 
+        id="workout_exercise_image"/>`;
 
 //================================
 // MOVES OVERVIEW SCREEN
