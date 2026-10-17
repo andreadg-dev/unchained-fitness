@@ -435,13 +435,6 @@ const EXERCISES = [
       "A controlled transition from a shoulder freeze into a headstand, training balance, core stability, and inverted control.",
   },
   {
-    id: "f2b7d9e4",
-    name: "Turtle Freeze to Headstand",
-    category: "Conditioning",
-    description:
-      "A controlled transition from a turtle freeze into a headstand, training balance, core control, and a stable inverted position.",
-  },
-  {
     id: "b3e8a4d9",
     name: "Turtle Freeze to Elbow Freeze",
     category: "Conditioning",
@@ -494,7 +487,7 @@ const WORKOUT_REQUIRED_KEYS = [
 
 const THRESHOLDS = {
   minExercisesInWorkout: 1,
-  maxExercisesInWorkout: 30,
+  maxExercisesInWorkout: 50,
   minSecsActiveRest: 10,
   maxSecsActiveRest: 120,
   minExerciseCount: 1,

@@ -482,6 +482,7 @@ button:disabled {
 
 #session_builder_wrapper {
   margin-top: 2rem;
+  margin-bottom: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -874,7 +875,6 @@ button:disabled {
   width: 18px;
   height: 18px;
   flex-shrink: 0;
-  stroke: currentColor;
 }
 
 .my_btn:active {
@@ -933,10 +933,10 @@ button:disabled {
         ========================================================= */
 
 @media (max-width: 800px) {
-  #root {
+  /*   #root {
     padding: 26px 18px 36px;
     gap: 20px;
-  }
+  } */
 
   #workout_config {
     grid-template-columns: 1fr;
@@ -971,10 +971,10 @@ button:disabled {
     font-size: 11px;
   }
 
-  #root {
+  /*   #root {
     padding: 20px 12px 28px;
     gap: 16px;
-  }
+  } */
 
   #workout_config_title {
     padding: 15px 16px;
@@ -1153,8 +1153,7 @@ button:disabled {
   width: 100%;
   max-width: var(--player-content-width);
   min-width: 0;
-  margin: 0 auto;
-  margin-top: 2rem;
+  margin: 0 auto 2rem;
 }
 
 .workout-player *,
@@ -1555,9 +1554,9 @@ button:disabled {
 ========================================================= */
 
 @media (max-width: 800px) {
-  #root {
+  /*   #root {
     padding: 26px 18px 36px;
-  }
+  } */
 
   .workout-player {
     gap: 16px;
@@ -1574,10 +1573,10 @@ button:disabled {
 ========================================================= */
 
 @media (max-width: 520px) {
-  #root {
+  /*   #root {
     min-height: auto;
     padding: 18px 12px 28px;
-  }
+  } */
 
   .workout-player {
     gap: 12px;
@@ -1661,9 +1660,9 @@ button:disabled {
 ========================================================= */
 
 @media (max-width: 360px) {
-  #root {
+  /*   #root {
     padding: 14px 8px 22px;
-  }
+  } */
 
   #workout_play_card {
     padding: 14px;
