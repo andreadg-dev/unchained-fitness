@@ -706,6 +706,11 @@ function renderView(view) {
       renderNotes();
       break;
 
+    case "movement-library":
+      window.location.href =
+        "https://my-movement-library.andydg88.workers.dev/#";
+      break;
+
     default:
       renderDashboard();
   }

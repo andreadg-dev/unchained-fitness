@@ -760,6 +760,30 @@ const NOTES_LANDING_PAGE = `<div class="dashboard">
 
             </button>
 
+            <button
+              type="button"
+              class="dashboard-tile"
+              data-view="movement-library"
+            >
+
+              <span class="dashboard-tile__number">
+                04
+              </span>
+
+              <span class="dashboard-tile__title">
+                MOVEMENTS LIBRARY
+              </span>
+
+              <span class="dashboard-tile__description">
+                Private breaking and calisthenics movements library with instructions and screenshots
+              </span>
+
+              <span class="dashboard-tile__arrow">
+                →
+              </span>
+
+            </button>
+
           </div>
 
         </div>`;
